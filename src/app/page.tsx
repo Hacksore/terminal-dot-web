@@ -19,7 +19,7 @@ const ProductCard = ({ sku }: { sku: Product }) => {
 
 const title = "Terminal Coffee";
 const description = "All the products from Terminal Coffee";
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const BASE_URL = `https://${process.env.VERCEL_URL}` || "http://localhost:3000";
 
 export const metadata: Metadata = {
   title,
