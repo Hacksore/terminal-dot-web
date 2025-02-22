@@ -17,9 +17,24 @@ const ProductCard = ({ sku }: { sku: Product }) => {
   );
 }
 
+const title = "Terminal Coffee";
+const description = "All the products from Terminal Coffee";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "Terminal Coffee",
-  description: "All the products from Terminal Coffee",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    images: [
+      {
+        url: `${BASE_URL}/og.png`,
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 }
 
 export default async function Home() {
