@@ -1,4 +1,5 @@
 import Terminal from "@terminaldotshop/sdk";
+import { Metadata } from "next";
 
 const client = new Terminal({
   bearerToken: process.env["TERMINAL_BEARER_TOKEN"],
@@ -16,6 +17,11 @@ const ProductCard = ({ sku }: { sku: Product }) => {
   );
 }
 
+export const metadata: Metadata = {
+  title: "Terminal Coffee",
+  description: "All the products from Terminal Coffee",
+}
+
 export default async function Home() {
   const { data } = await client.product.list();
 
@@ -24,7 +30,7 @@ export default async function Home() {
       <div className="flex items-center gap-2">
         <h2 className="text-5xl font-bold">Terminal Coffee</h2>
         {/* add a blinking orange cursor after the header*/}
-        <div className="w-5 h-10 bg-orange-500 blink"></div>
+        <div className="w-5 h-10 bg-orange blink"></div>
       </div>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         {data.map((sku) => (
