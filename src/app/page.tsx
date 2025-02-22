@@ -17,8 +17,8 @@ const ProductCard = ({ sku }: { sku: Product }) => {
   );
 }
 
-const title = "Terminal Coffee";
-const description = "All the products from Terminal Coffee";
+const title = "terminal coffee";
+const description = "all the products from terminal coffee";
 const BASE_URL = process.env.VERCEL_ENV ? "https://terminal-dot-web.vercel.app" : "http://localhost:3000";
 
 export const metadata: Metadata = {
@@ -49,8 +49,7 @@ export default async function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="flex items-center gap-2">
-        <h2 className="text-5xl font-bold">Terminal Coffee</h2>
-        {/* add a blinking orange cursor after the header*/}
+        <h2 className="text-5xl font-bold">terminal</h2>
         <div className="w-5 h-10 bg-orange blink"></div>
       </div>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
