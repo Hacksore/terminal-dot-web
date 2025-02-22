@@ -35,6 +35,12 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    title,
+    description,
+    images: [`${BASE_URL}/og.png`],
+    card: "summary_large_image",
+  },
 }
 
 export default async function Home() {
