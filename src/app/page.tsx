@@ -42,7 +42,7 @@ export default async function Home() {
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="flex items-center gap-2">
         <h2 className="text-5xl font-bold">terminal</h2>
-        <div className="w-5 h-10 bg-primary blink"></div>
+        <div className="w-5 h-10 bg-primary blink"/>
       </div>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         {data.map((sku) => (
