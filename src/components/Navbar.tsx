@@ -1,15 +1,15 @@
-'use client'
+"use client";
 
-import { useCartStore } from '@/store/cart'
-import { ShoppingCart } from 'lucide-react'
+import { useCartStore } from "@/store/cart";
+import { ShoppingCart } from "lucide-react";
 
 interface NavbarProps {
-  onCartClick: () => void
+  onCartClick: () => void;
 }
 
 export const Navbar = ({ onCartClick }: NavbarProps) => {
-  const items = useCartStore((state) => state.items)
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
+  const items = useCartStore((state) => state.items);
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-zinc-900 border-b border-zinc-700 p-4 z-50">
@@ -31,5 +31,5 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
         </button>
       </div>
     </div>
-  )
-} 
+  );
+};

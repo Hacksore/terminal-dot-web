@@ -1,7 +1,7 @@
 import { CartWrapper } from "@/components/CartWrapper";
 import { ProductCard } from "@/components/ProductCard";
 import Terminal from "@terminaldotshop/sdk";
-export { metadata } from "./metadata"
+export { metadata } from "./metadata";
 
 const client = new Terminal({
   bearerToken: process.env.TERMINAL_BEARER_TOKEN,

@@ -42,7 +42,9 @@ export const useCartStore = create<CartStore>()(
       removeItem: (productId: string) =>
         set(
           produce((state: CartStore) => {
-            const index = state.items.findIndex((item) => item.id === productId);
+            const index = state.items.findIndex(
+              (item) => item.id === productId,
+            );
             if (index !== -1) {
               state.items.splice(index, 1);
             }

@@ -1,52 +1,52 @@
-'use client'
+"use client";
 
-import { useCartStore } from '@/store/cart'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useCartStore } from "@/store/cart";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function CheckoutPage() {
-  const router = useRouter()
-  const items = useCartStore((state) => state.items)
-  const clearCart = useCartStore((state) => state.clearCart)
+  const router = useRouter();
+  const items = useCartStore((state) => state.items);
+  const clearCart = useCartStore((state) => state.clearCart);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-  })
+    name: "",
+    email: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
+  });
 
   const total = items.reduce((sum, item) => {
-    if (!item.selectedVariant) return sum
-    return sum + item.selectedVariant.price * item.quantity
-  }, 0)
+    if (!item.selectedVariant) return sum;
+    return sum + item.selectedVariant.price * item.quantity;
+  }, 0);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // Here you would typically:
     // 1. Validate the form data
     // 2. Process the payment
     // 3. Create the order
     // 4. Clear the cart
     // 5. Redirect to a success page
-    
+
     // For now, we'll just clear the cart and redirect
-    clearCart()
-    router.push('/')
-  }
+    clearCart();
+    router.push("/");
+  };
 
   return (
     <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Checkout</h1>
-        
+
         <div className="bg-zinc-800 rounded-lg p-6 mb-8">
           <h2 className="text-xl font-bold mb-4">Order Summary</h2>
           <div className="space-y-2">
@@ -61,7 +61,11 @@ export default function CheckoutPage() {
                   )}
                 </div>
                 <p className="font-medium">
-                  ${((item.selectedVariant?.price || 0) * item.quantity / 100).toFixed(2)}
+                  $
+                  {(
+                    ((item.selectedVariant?.price || 0) * item.quantity) /
+                    100
+                  ).toFixed(2)}
                 </p>
               </div>
             ))}
@@ -84,7 +88,9 @@ export default function CheckoutPage() {
                   id="name"
                   required
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -94,7 +100,9 @@ export default function CheckoutPage() {
                   id="email"
                   required
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -104,7 +112,9 @@ export default function CheckoutPage() {
                 id="address"
                 required
                 value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, address: e.target.value })
+                }
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -114,7 +124,9 @@ export default function CheckoutPage() {
                   id="city"
                   required
                   value={formData.city}
-                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, city: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -123,7 +135,9 @@ export default function CheckoutPage() {
                   id="state"
                   required
                   value={formData.state}
-                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, state: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -132,7 +146,9 @@ export default function CheckoutPage() {
                   id="zipCode"
                   required
                   value={formData.zipCode}
-                  onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, zipCode: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -146,7 +162,9 @@ export default function CheckoutPage() {
                 id="cardNumber"
                 required
                 value={formData.cardNumber}
-                onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, cardNumber: e.target.value })
+                }
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -157,7 +175,9 @@ export default function CheckoutPage() {
                   placeholder="MM/YY"
                   required
                   value={formData.expiryDate}
-                  onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, expiryDate: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -166,7 +186,9 @@ export default function CheckoutPage() {
                   id="cvv"
                   required
                   value={formData.cvv}
-                  onChange={(e) => setFormData({ ...formData, cvv: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, cvv: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -178,5 +200,5 @@ export default function CheckoutPage() {
         </form>
       </div>
     </div>
-  )
-} 
+  );
+}

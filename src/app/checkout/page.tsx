@@ -1,5 +1,5 @@
 import CheckoutPage from "./page.client";
-import { metadata as allMetadata } from "../metadata"
+import { metadata as allMetadata } from "../metadata";
 
 export const metadata = {
   ...allMetadata,
@@ -7,5 +7,5 @@ export const metadata = {
 };
 
 export default function Checkout() {
-  return <CheckoutPage />
-} 
+  return <CheckoutPage />;
+}
