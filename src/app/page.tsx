@@ -1,10 +1,11 @@
 import Terminal from "@terminaldotshop/sdk";
 import { Metadata } from "next";
+import { ProductCard } from "@/components/ProductCard";
+import { CartDisplay } from "@/components/CartDisplay";
 
 const client = new Terminal({
   bearerToken: process.env["TERMINAL_BEARER_TOKEN"],
 });
-
 
 const title = "terminal coffee";
 const description = "all the products from terminal coffee";
@@ -32,18 +33,6 @@ export const metadata: Metadata = {
   },
 }
 
-type ProductList = Awaited<ReturnType<typeof client.product.list>>;
-type Product = ProductList["data"][number];
-
-const ProductCard = ({ sku }: { sku: Product }) => {
-  return (
-    <div className="flex flex-col gap-2 max-w-2xl rounded-2xl px-4 py-2 border border-zinc-700">
-      <h1 className="text-3xl font-bold">{sku.name}</h1>
-      <p>{sku.description}</p>
-    </div>
-  );
-}
-
 export default async function Home() {
   const { data } = await client.product.list();
 
@@ -58,7 +47,7 @@ export default async function Home() {
           <ProductCard key={sku.id} sku={sku} />
         ))}
       </main>
-
+      <CartDisplay />
     </div>
   );
 }
