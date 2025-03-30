@@ -1,22 +1,26 @@
 "use client";
 
 import { useCartStore } from "@/store/cart";
-import type { CartItem } from "@/store/cart";
-import { X } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Trash2 } from 'lucide-react'
 
 interface CartDisplayProps {
   isOpen: boolean;
-  onClose: () => void;
+  onOpenChange: (open: boolean) => void;
 }
 
-export const CartDisplay = ({ isOpen, onClose }: CartDisplayProps) => {
+export function CartDisplay({ isOpen, onOpenChange }: CartDisplayProps) {
   const items = useCartStore((state) => state.items);
-  const removeItem = useCartStore((state) => state.removeItem);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeItem = useCartStore((state) => state.removeItem);
   const clearCart = useCartStore((state) => state.clearCart);
-
-  if (!isOpen) return null;
 
   const total = items.reduce((sum, item) => {
     if (!item.selectedVariant) return sum;
@@ -24,86 +28,82 @@ export const CartDisplay = ({ isOpen, onClose }: CartDisplayProps) => {
   }, 0);
 
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/50 z-40"
-        onClick={onClose}
-      />
-      
-      {/* Drawer */}
-      <div className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-zinc-900 border-l border-zinc-700 p-4 z-50 overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold">Cart</h3>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={clearCart}
-              className="text-sm text-zinc-400 hover:text-white"
-            >
-              Clear Cart
-            </button>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-zinc-800 rounded-full transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-        <div className="space-y-4">
-          {items.map((item: CartItem) => (
-            <div key={item.id} className="flex items-center justify-between p-4 bg-zinc-800 rounded-lg">
-              <div>
-                <p className="font-medium">{item.name}</p>
-                {item.selectedVariant && (
-                  <p className="text-sm text-zinc-400">
-                    {item.selectedVariant.name} - ${(item.selectedVariant.price / 100).toFixed(2)}
-                  </p>
-                )}
-                <p className="text-sm text-zinc-400">Quantity: {item.quantity}</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
-                    disabled={item.quantity <= 1}
-                    className="px-2 py-1 text-sm bg-zinc-700 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-600"
-                  >
-                    -
-                  </button>
-                  <span>{item.quantity}</span>
-                  <button
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="px-2 py-1 text-sm bg-zinc-700 rounded hover:bg-zinc-600"
-                  >
-                    +
-                  </button>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[425px] bg-background">
+        <DialogHeader>
+          <DialogTitle>Shopping Cart</DialogTitle>
+        </DialogHeader>
+        <div className="mt-4">
+          {items.length === 0 ? (
+            <p className="text-muted-foreground">Your cart is empty</p>
+          ) : (
+            <div className="space-y-4">
+              {items.map((item) => (
+                <div key={item.id} className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-medium">{item.name}</h3>
+                    {item.selectedVariant && (
+                      <p className="text-sm text-muted-foreground">
+                        {item.selectedVariant.name}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-2 mt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center">{item.quantity}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-medium">
+                      ${((item.selectedVariant?.price || 0) * item.quantity / 100).toFixed(2)}
+                    </p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-destructive hover:text-destructive"
+                      onClick={() => removeItem(item.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-                <button
-                  onClick={() => removeItem(item.id)}
-                  className="text-red-400 hover:text-red-300"
-                >
-                  Remove
-                </button>
+              ))}
+              <div className="border-t border-border pt-4">
+                <div className="flex justify-between font-bold mb-4">
+                  <span>Total</span>
+                  <span>${(total / 100).toFixed(2)}</span>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => clearCart()}
+                  >
+                    Clear Cart
+                  </Button>
+                  <Link href="/checkout" onClick={() => onOpenChange(false)}>
+                    <Button className="flex-1">
+                      Proceed to Checkout
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
-          ))}
+          )}
         </div>
-        {items.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-zinc-700">
-            <p className="text-right font-bold mb-4">
-              Total: ${(total / 100).toFixed(2)}
-            </p>
-            <Link
-              href="/checkout"
-              onClick={onClose}
-              className="w-full bg-primary text-white py-3 rounded-lg font-bold text-center hover:bg-primary/90 transition-colors block"
-            >
-              Proceed to Checkout
-            </Link>
-          </div>
-        )}
-      </div>
-    </>
+      </DialogContent>
+    </Dialog>
   );
-};
+}

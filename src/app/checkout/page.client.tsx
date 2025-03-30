@@ -3,6 +3,9 @@
 import { useCartStore } from '@/store/cart'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -36,7 +39,12 @@ export default function CheckoutPage() {
     
     // For now, we'll just clear the cart and redirect
     clearCart()
-    router.push('/based')
+    router.push('/')
+  }
+
+  if (items.length === 0) {
+    router.push('/')
+    return null
   }
 
   return (
@@ -75,82 +83,59 @@ export default function CheckoutPage() {
           <div className="space-y-4">
             <h2 className="text-xl font-bold">Shipping Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
+              <div className="space-y-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input
                   id="name"
                   required
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 />
               </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-1">
-                  Email
-                </label>
-                <input
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
                   type="email"
                   id="email"
                   required
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
               </div>
             </div>
-            <div>
-              <label htmlFor="address" className="block text-sm font-medium mb-1">
-                Address
-              </label>
-              <input
-                type="text"
+            <div className="space-y-2">
+              <Label htmlFor="address">Address</Label>
+              <Input
                 id="address"
                 required
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                 value={formData.address}
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label htmlFor="city" className="block text-sm font-medium mb-1">
-                  City
-                </label>
-                <input
-                  type="text"
+              <div className="space-y-2">
+                <Label htmlFor="city">City</Label>
+                <Input
                   id="city"
                   required
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={formData.city}
                   onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                 />
               </div>
-              <div>
-                <label htmlFor="state" className="block text-sm font-medium mb-1">
-                  State
-                </label>
-                <input
-                  type="text"
+              <div className="space-y-2">
+                <Label htmlFor="state">State</Label>
+                <Input
                   id="state"
                   required
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={formData.state}
                   onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                 />
               </div>
-              <div>
-                <label htmlFor="zipCode" className="block text-sm font-medium mb-1">
-                  ZIP Code
-                </label>
-                <input
-                  type="text"
+              <div className="space-y-2">
+                <Label htmlFor="zipCode">ZIP Code</Label>
+                <Input
                   id="zipCode"
                   required
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={formData.zipCode}
                   onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
                 />
@@ -160,43 +145,31 @@ export default function CheckoutPage() {
 
           <div className="space-y-4">
             <h2 className="text-xl font-bold">Payment Information</h2>
-            <div>
-              <label htmlFor="cardNumber" className="block text-sm font-medium mb-1">
-                Card Number
-              </label>
-              <input
-                type="text"
+            <div className="space-y-2">
+              <Label htmlFor="cardNumber">Card Number</Label>
+              <Input
                 id="cardNumber"
                 required
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                 value={formData.cardNumber}
                 onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="expiryDate" className="block text-sm font-medium mb-1">
-                  Expiry Date
-                </label>
-                <input
-                  type="text"
+              <div className="space-y-2">
+                <Label htmlFor="expiryDate">Expiry Date</Label>
+                <Input
                   id="expiryDate"
                   placeholder="MM/YY"
                   required
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={formData.expiryDate}
                   onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
                 />
               </div>
-              <div>
-                <label htmlFor="cvv" className="block text-sm font-medium mb-1">
-                  CVV
-                </label>
-                <input
-                  type="text"
+              <div className="space-y-2">
+                <Label htmlFor="cvv">CVV</Label>
+                <Input
                   id="cvv"
                   required
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={formData.cvv}
                   onChange={(e) => setFormData({ ...formData, cvv: e.target.value })}
                 />
@@ -204,12 +177,9 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors"
-          >
+          <Button type="submit" className="w-full">
             Place Order
-          </button>
+          </Button>
         </form>
       </div>
     </div>
