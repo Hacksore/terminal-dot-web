@@ -1,23 +1,26 @@
-'use client'
+"use client";
 
-import { useCartStore } from '@/store/cart'
-import type { Product, ProductVariant } from '@terminaldotshop/sdk/resources/product'
-import { useState } from 'react'
+import { useCartStore } from "@/store/cart";
+import type {
+  Product,
+  ProductVariant,
+} from "@terminaldotshop/sdk/resources/product";
+import { useState } from "react";
 
 interface ProductCardProps {
-  sku: Product
+  sku: Product;
 }
 
 export const ProductCard = ({ sku }: ProductCardProps) => {
-  const addItem = useCartStore((state) => state.addItem)
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | undefined>(
-    sku.variants[0]
-  )
+  const addItem = useCartStore((state) => state.addItem);
+  const [selectedVariant, setSelectedVariant] = useState<
+    ProductVariant | undefined
+  >(sku.variants[0]);
 
   const handleAddToCart = () => {
-    if (!selectedVariant) return
-    addItem({ ...sku, selectedVariant })
-  }
+    if (!selectedVariant) return;
+    addItem({ ...sku, selectedVariant });
+  };
 
   return (
     <div className="flex flex-col gap-2 max-w-2xl rounded-2xl px-4 py-2 border border-zinc-700">
@@ -31,8 +34,8 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
               onClick={() => setSelectedVariant(variant)}
               className={`px-3 py-1 rounded-lg text-sm ${
                 selectedVariant?.id === variant.id
-                  ? 'bg-black text-white'
-                  : 'bg-zinc-800 hover:bg-zinc-700'
+                  ? "bg-black text-white"
+                  : "bg-zinc-800 hover:bg-zinc-700"
               }`}
             >
               {variant.name} - ${(variant.price / 100).toFixed(2)}
@@ -40,7 +43,7 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
           ))}
         </div>
       )}
-      <button 
+      <button
         onClick={handleAddToCart}
         disabled={!selectedVariant}
         className="bg-primary my-2 py-2 font-bold cursor-pointer rounded-2xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -48,5 +51,5 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
         Add to cart
       </button>
     </div>
-  )
-} 
+  );
+};

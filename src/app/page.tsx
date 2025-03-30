@@ -9,7 +9,9 @@ const client = new Terminal({
 
 const title = "terminal coffee";
 const description = "all the products from terminal coffee";
-const BASE_URL = process.env.VERCEL_ENV ? "https://terminal-dot-web.vercel.app" : "http://localhost:3000";
+const BASE_URL = process.env.VERCEL_ENV
+  ? "https://terminal-dot-web.vercel.app"
+  : "http://localhost:3000";
 
 export const metadata: Metadata = {
   title,
@@ -31,7 +33,7 @@ export const metadata: Metadata = {
     images: [`${BASE_URL}/og.png`],
     card: "summary_large_image",
   },
-}
+};
 
 export default async function Home() {
   const { data } = await client.product.list();
