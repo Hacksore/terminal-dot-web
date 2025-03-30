@@ -51,14 +51,15 @@ export const CartDisplay = () => {
                     onClick={() =>
                       updateQuantity(item.id, Math.max(0, item.quantity - 1))
                     }
-                    className="px-2 py-1 text-sm bg-zinc-800 rounded"
+                    disabled={item.quantity <= 1}
+                    className="px-2 py-1 text-sm bg-zinc-800 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700"
                   >
                     -
                   </button>
                   <span>{item.quantity}</span>
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="px-2 py-1 text-sm bg-zinc-800 rounded"
+                    className="px-2 py-1 text-sm bg-zinc-800 rounded hover:bg-zinc-700"
                   >
                     +
                   </button>
