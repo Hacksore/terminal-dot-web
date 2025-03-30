@@ -3,6 +3,7 @@
 import { useCartStore } from "@/store/cart";
 import type { CartItem } from "@/store/cart";
 import { X } from "lucide-react";
+import Link from "next/link";
 
 interface CartDisplayProps {
   isOpen: boolean;
@@ -90,9 +91,16 @@ export const CartDisplay = ({ isOpen, onClose }: CartDisplayProps) => {
         </div>
         {items.length > 0 && (
           <div className="mt-4 pt-4 border-t border-zinc-700">
-            <p className="text-right font-bold">
+            <p className="text-right font-bold mb-4">
               Total: ${(total / 100).toFixed(2)}
             </p>
+            <Link
+              href="/checkout"
+              onClick={onClose}
+              className="w-full bg-primary text-white py-3 rounded-lg font-bold text-center hover:bg-primary/90 transition-colors block"
+            >
+              Proceed to Checkout
+            </Link>
           </div>
         )}
       </div>
