@@ -9,14 +9,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Trash2 } from 'lucide-react'
+import { Trash2 } from "lucide-react";
 
 interface CartDisplayProps {
   isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
+  onClose: () => void;
 }
 
-export function CartDisplay({ isOpen, onOpenChange }: CartDisplayProps) {
+export function CartDisplay({ isOpen, onClose }: CartDisplayProps) {
   const items = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
@@ -28,7 +28,14 @@ export function CartDisplay({ isOpen, onOpenChange }: CartDisplayProps) {
   }, 0);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(value) => {
+        if (!value) {
+          onClose();
+        }
+      }}
+    >
       <DialogContent className="sm:max-w-[425px] bg-background">
         <DialogHeader>
           <DialogTitle>Shopping Cart</DialogTitle>
@@ -51,7 +58,12 @@ export function CartDisplay({ isOpen, onOpenChange }: CartDisplayProps) {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                        onClick={() =>
+                          updateQuantity(
+                            item.id,
+                            Math.max(0, item.quantity - 1),
+                          )
+                        }
                       >
                         -
                       </Button>
@@ -59,7 +71,9 @@ export function CartDisplay({ isOpen, onOpenChange }: CartDisplayProps) {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
                       >
                         +
                       </Button>
@@ -67,7 +81,11 @@ export function CartDisplay({ isOpen, onOpenChange }: CartDisplayProps) {
                   </div>
                   <div className="text-right">
                     <p className="font-medium">
-                      ${((item.selectedVariant?.price || 0) * item.quantity / 100).toFixed(2)}
+                      $
+                      {(
+                        ((item.selectedVariant?.price || 0) * item.quantity) /
+                        100
+                      ).toFixed(2)}
                     </p>
                     <Button
                       variant="ghost"
@@ -94,9 +112,7 @@ export function CartDisplay({ isOpen, onOpenChange }: CartDisplayProps) {
                     Clear Cart
                   </Button>
                   <Link href="/checkout" onClick={() => onOpenChange(false)}>
-                    <Button className="flex-1">
-                      Proceed to Checkout
-                    </Button>
+                    <Button className="flex-1">Proceed to Checkout</Button>
                   </Link>
                 </div>
               </div>
