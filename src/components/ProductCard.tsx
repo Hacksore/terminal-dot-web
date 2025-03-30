@@ -30,6 +30,7 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
         <div className="flex gap-2">
           {sku.variants.map((variant) => (
             <button
+              type="button"
               key={variant.id}
               onClick={() => setSelectedVariant(variant)}
               className={`px-3 py-1 rounded-lg text-sm ${
@@ -44,6 +45,7 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
         </div>
       )}
       <button
+        type="button"
         onClick={handleAddToCart}
         disabled={!selectedVariant}
         className="bg-primary my-2 py-2 font-bold cursor-pointer rounded-2xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
