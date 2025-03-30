@@ -1,7 +1,7 @@
 import Terminal from "@terminaldotshop/sdk";
 import { Metadata } from "next";
 import { ProductCard } from "@/components/ProductCard";
-import { CartDisplay } from "@/components/CartDisplay";
+import { CartWrapper } from "@/components/CartWrapper";
 
 const client = new Terminal({
   bearerToken: process.env["TERMINAL_BEARER_TOKEN"],
@@ -39,17 +39,14 @@ export default async function Home() {
   const { data } = await client.product.list();
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <div className="flex items-center gap-2">
-        <h2 className="text-5xl font-bold">terminal</h2>
-        <div className="w-5 h-10 bg-primary blink" />
+    <CartWrapper>
+      <div className="grid grid-rows-[60px_1fr] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+          {data.map((sku) => (
+            <ProductCard key={sku.id} sku={sku} />
+          ))}
+        </main>
       </div>
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        {data.map((sku) => (
-          <ProductCard key={sku.id} sku={sku} />
-        ))}
-      </main>
-      <CartDisplay />
-    </div>
+    </CartWrapper>
   );
 }
