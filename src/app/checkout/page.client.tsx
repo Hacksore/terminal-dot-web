@@ -37,9 +37,11 @@ export default function CheckoutPage() {
     // 4. Clear the cart
     // 5. Redirect to a success page
 
+    console.log("Form submitted", formData);
+
     // For now, we'll just clear the cart and redirect
-    clearCart();
-    router.push("/");
+    // clearCart();
+    // router.push("/");
   };
 
   return (
