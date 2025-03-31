@@ -111,7 +111,7 @@ export function CartDisplay({ isOpen, onClose }: CartDisplayProps) {
                   >
                     Clear Cart
                   </Button>
-                  <Link href="/checkout" onClick={() => onOpenChange(false)}>
+                  <Link href="/checkout" onClick={() => onClose()}>
                     <Button className="flex-1">Proceed to Checkout</Button>
                   </Link>
                 </div>
