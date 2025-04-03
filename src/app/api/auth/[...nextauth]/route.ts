@@ -25,7 +25,7 @@ function TerminalProvider<P extends TerminalProfile>(
     },
     profile: async (profile) => {
       return {
-        id: profile.sub, // assuming 'sub' is the user ID from the profile
+        id: profile.id,
         name: profile.name || "Unknown User",
         email: profile.email || null,
       };
