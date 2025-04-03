@@ -18,7 +18,7 @@ function TerminalProvider<P extends TerminalProfile>(
     type: "oauth",
     authorization: {
       url: `${API_URL}/authorize`,
-      params: { scope: "ligma" },
+      params: { scope: "ligma", response_type: "code" },
     },
     token: {
       url: `${API_URL}/token`,
