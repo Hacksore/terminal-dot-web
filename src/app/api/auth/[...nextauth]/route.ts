@@ -7,6 +7,8 @@ interface TerminalProfile {
   email?: string;
 }
 
+const API_URL = "https://auth.terminal.shop";
+
 function TerminalProvider<P extends TerminalProfile>(
   options: OAuthUserConfig<P>,
 ): OAuthConfig<P> {
@@ -15,13 +17,11 @@ function TerminalProvider<P extends TerminalProfile>(
     name: "TerminalProvider",
     type: "oauth",
     authorization: {
-      url: "https://auth.terminal.shop/authorize",
-      params: { scope: "openid profile email" },
+      url: `${API_URL}/authorize`,
+      params: { scope: "ligma" },
     },
-    wellKnown:
-      "https://auth.terminal.shop/.well-known/oauth-authorization-server",
     token: {
-      url: "https://auth.terminal.shop/token",
+      url: `${API_URL}/token`,
     },
     profile: async (profile) => {
       return {
@@ -35,6 +35,7 @@ function TerminalProvider<P extends TerminalProfile>(
 }
 
 const handler = NextAuth({
+  debug: true,
   providers: [
     TerminalProvider({
       // biome-ignore lint/style/noNonNullAssertion: <explanation>
