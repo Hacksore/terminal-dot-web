@@ -45,7 +45,7 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
             <button
               onClick={() => signIn("terminalProvider")}
               type="button"
-              className="px-4 py-2 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors"
+              className="cursor-pointer px-4 py-2 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors"
             >
               Login
             </button>
