@@ -11,8 +11,6 @@ const CRON_PRODUCT_ID = "prd_01JD0E7PD4H3XDZA5P5VXSDPQC";
 export default async function Home() {
   const { data } = await client.product.list();
 
-  console.log("Fetched products:", data);
-
   const filteredData = data.filter((product) => product.id !== CRON_PRODUCT_ID);
   return <App data={filteredData} />;
 }
