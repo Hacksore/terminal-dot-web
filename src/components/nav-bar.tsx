@@ -32,7 +32,7 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
           <button
             onClick={onCartClick}
             type="button"
-            className="relative p-2 hover:bg-zinc-800 rounded-full transition-colors"
+            className="cursor-pointer relative p-2 hover:bg-zinc-800 rounded-full transition-colors"
           >
             <ShoppingCart className="w-6 h-6" />
             {totalItems > 0 && (
@@ -76,7 +76,7 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
             <button
               onClick={() => signIn("terminalProvider")}
               type="button"
-              className="px-4 py-2 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
+              className="cursor-pointer px-4 py-2 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors duration-300 flex items-center gap-2"
             >
               <User className="w-4 h-4" />
               <span>Login</span>
