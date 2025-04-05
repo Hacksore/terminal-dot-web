@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface NavbarProps {
-  onCartClick: () => void;
+  onCartClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const Navbar = ({ onCartClick }: NavbarProps) => {
