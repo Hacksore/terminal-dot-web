@@ -19,7 +19,7 @@ interface NavbarProps {
 export const Navbar = ({ onCartClick }: NavbarProps) => {
   const items = useCartStore((state) => state.items);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-zinc-900 border-b border-zinc-700 p-4 z-50">
@@ -41,14 +41,21 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
               </span>
             )}
           </button>
-          {session ? (
+          {status === "loading" ? (
+            <div className="w-[120px] h-10 bg-zinc-800 rounded-md animate-pulse" />
+          ) : session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center text-base font-bold hover:bg-primary/90 transition-colors"
+                  className="w-[120px] h-10 rounded-md bg-zinc-800 text-zinc-100 flex items-center justify-center gap-2 text-base font-medium hover:bg-zinc-700/90 transition-colors"
                 >
-                  {session.user?.name?.[0] || "U"}
+                  <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center">
+                    {session.user?.name?.[0] || "U"}
+                  </div>
+                  <span className="truncate">
+                    {session.user?.name?.split(" ")[0] || "User"}
+                  </span>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -76,7 +83,7 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
             <button
               onClick={() => signIn("terminalProvider")}
               type="button"
-              className="cursor-pointer px-4 py-2 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors duration-300 flex items-center gap-2"
+              className="w-[120px] h-10 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center gap-2"
             >
               <User className="w-4 h-4" />
               <span>Login</span>
