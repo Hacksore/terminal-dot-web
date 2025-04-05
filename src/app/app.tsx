@@ -1,6 +1,6 @@
 "use client";
-import { CartWrapper } from "@/components/CartWrapper";
-import { ProductCard } from "@/components/ProductCard";
+import { CartWrapper } from "@/components/cart-wrapper";
+import { ProductCard } from "@/components/product-card";
 import type { Product } from "@terminaldotshop/sdk/resources/product";
 import { SessionProvider } from "next-auth/react";
 

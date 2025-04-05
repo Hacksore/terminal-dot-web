@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Navbar } from "./Navbar";
-import { CartDisplay } from "./CartDisplay";
+import { Navbar } from "./nav-bar";
+import { CartDisplay } from "./cart-display";
 
 interface CartWrapperProps {
   children: React.ReactNode;
