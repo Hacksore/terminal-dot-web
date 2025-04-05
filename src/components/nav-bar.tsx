@@ -1,8 +1,16 @@
 "use client";
 
 import { useCartStore } from "@/store/cart";
-import { ShoppingCart } from "lucide-react";
+import { LogOut, ShoppingCart, User } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface NavbarProps {
   onCartClick: () => void;
@@ -18,7 +26,7 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
       <div className="max-w-4xl mx-auto flex justify-between items-center">
         <div className="flex items-center gap-2">
           <h2 className="text-2xl font-bold">terminal</h2>
-          <div className="w-5 h-10 bg-primary blink"></div>
+          <div className="w-5 h-10 bg-primary blink" />
         </div>
         <div className="flex items-center gap-4">
           <button
@@ -34,20 +42,39 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
             )}
           </button>
           {session ? (
-            <button
-              onClick={() => signOut()}
-              type="button"
-              className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-medium hover:bg-primary/90 transition-colors"
-            >
-              {session.user?.name?.[0] || "U"}
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center text-base font-bold hover:bg-primary/90 transition-colors"
+                >
+                  {session.user?.name?.[0] || "U"}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{session.user?.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {session.user?.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => signOut()} className="text-red-500">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <button
               onClick={() => signIn("terminalProvider")}
               type="button"
-              className="px-4 py-2 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors"
+              className="px-4 py-2 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
             >
-              Login
+              <User className="w-4 h-4" />
+              <span>Login</span>
             </button>
           )}
         </div>
