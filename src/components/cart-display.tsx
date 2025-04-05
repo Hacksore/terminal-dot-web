@@ -58,6 +58,7 @@ export function CartDisplay({ isOpen, onClose }: CartDisplayProps) {
                       <Button
                         variant="outline"
                         size="sm"
+                        className="cursor-pointer"
                         onClick={() =>
                           updateQuantity(
                             item.id,
@@ -71,6 +72,7 @@ export function CartDisplay({ isOpen, onClose }: CartDisplayProps) {
                       <Button
                         variant="outline"
                         size="sm"
+                        className="cursor-pointer"
                         onClick={() =>
                           updateQuantity(item.id, item.quantity + 1)
                         }
@@ -106,13 +108,14 @@ export function CartDisplay({ isOpen, onClose }: CartDisplayProps) {
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    className="flex-1"
+                    className="cursor-pointer flex-1"
+                  
                     onClick={() => clearCart()}
                   >
                     Clear Cart
                   </Button>
                   <Link href="/checkout" onClick={() => onClose()}>
-                    <Button className="flex-1">Proceed to Checkout</Button>
+                    <Button className="cursor-pointer flex-1">Proceed to Checkout</Button>
                   </Link>
                 </div>
               </div>
