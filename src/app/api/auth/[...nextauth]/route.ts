@@ -33,7 +33,10 @@ function TerminalProvider<P extends TerminalProfile>(
           throw new Error("No access token provided");
         }
 
-        console.log("[Terminal OAuth] Fetching user info with access token:", accessToken);
+        console.log(
+          "[Terminal OAuth] Fetching user info with access token:",
+          accessToken,
+        );
         const response = await fetch(`${API_URL}/profile`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
