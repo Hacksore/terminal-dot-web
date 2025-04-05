@@ -92,7 +92,7 @@ export function CartDisplay({ isOpen, onClose }: CartDisplayProps) {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-destructive hover:text-destructive"
+                      className="cursor-pointer text-destructive hover:text-destructive"
                       onClick={() => removeItem(item.id)}
                     >
                       <Trash2 className="h-4 w-4" />
