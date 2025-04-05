@@ -8,16 +8,10 @@ const client = new Terminal({
 
 const apps = await client.app.list();
 
-// deleta all apps
-for (const app of apps.data) {
-  await client.app.delete(app.id);
-  console.log(`Deleted app: ${app.id}`);
-}
-
-const redirectURI = "http://localhost:3000/api/auth/callback/terminalProvider";
+const redirectURI = "https://terminal-dot-web.vercel.app/api/auth/callback/terminalProvider";
 const app = await client.app.create({
-  id: "testing",
-  name: "testing",
+  id: "terminal-web-prod",
+  name: "Terminal Web",
   redirectURI,
 });
 
