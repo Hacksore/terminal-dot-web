@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import type { OAuthConfig, OAuthUserConfig } from "next-auth/providers/oauth";
 import type { JWT } from "next-auth/jwt";
 import type { Session } from "next-auth";
+import type { Account } from "next-auth";
 
 interface TerminalProfile {
   id: string;
@@ -116,24 +117,81 @@ function TerminalProvider<P extends TerminalProfile>(
   };
 }
 
+// TODO: let's replace this with t3-env so that we have typesafe env
+const getRequiredEnvVar = (name: string): string => {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
+};
+
 export const authOptions = {
   providers: [
     TerminalProvider({
-      // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      clientId: process.env.CLIENT_ID!,
-      // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      clientSecret: process.env.CLIENT_SECRET!,
+      clientId: getRequiredEnvVar("CLIENT_ID"),
+      clientSecret: getRequiredEnvVar("CLIENT_SECRET"),
     }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account }: { token: JWT; account: Account | null }) {
+      const terminalToken = token as TerminalToken;
+
       if (account) {
-        token.access_token = account.access_token;
-        token.token_type = account.token_type;
-        token.expires_at = account.expires_at;
-        token.refresh_token = account.refresh_token;
+        terminalToken.access_token = account.access_token;
+        terminalToken.token_type = account.token_type;
+        terminalToken.expires_at = account.expires_at as number;
+        terminalToken.refresh_token = account.refresh_token;
+        return terminalToken;
       }
-      return token;
+
+      if (terminalToken.expires_at && Date.now() < terminalToken.expires_at * 1000) {
+        return terminalToken;
+      }
+
+      if (terminalToken.refresh_token) {
+        try {
+          const clientId = process.env.CLIENT_ID;
+          const clientSecret = process.env.CLIENT_SECRET;
+
+          if (!clientId || !clientSecret) {
+            throw new Error("Missing client credentials");
+          }
+
+          const body = new URLSearchParams();
+          body.append("grant_type", "refresh_token");
+          body.append("refresh_token", terminalToken.refresh_token);
+          body.append("client_id", clientId);
+          body.append("client_secret", clientSecret);
+
+          const response = await fetch(`${AUTH_API_URL}/token`, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body,
+            method: "POST",
+          });
+
+          const tokens = await response.json();
+
+          if (!response.ok) {
+            throw new Error("Failed to refresh token");
+          }
+
+          return {
+            ...terminalToken,
+            access_token: tokens.access_token,
+            token_type: tokens.token_type,
+            expires_at: tokens.expires_at,
+            refresh_token: tokens.refresh_token ?? terminalToken.refresh_token,
+          };
+        } catch (error) {
+          console.error("Error refreshing token:", error);
+          return terminalToken;
+        }
+      }
+
+      return terminalToken;
     },
     async session({ session, token }: { session: TerminalSession; token: TerminalToken }) {
       session.access_token = token.access_token;
