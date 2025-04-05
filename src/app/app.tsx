@@ -1,9 +1,10 @@
 "use client";
 import { CartWrapper } from "@/components/CartWrapper";
 import { ProductCard } from "@/components/ProductCard";
+import type { Product } from "@terminaldotshop/sdk/resources/product";
 import { SessionProvider } from "next-auth/react";
 
-export const App = ({ data }) => {
+export const App = ({ data }: { data: Product[] }) => {
   return (
     <SessionProvider>
       <CartWrapper>
