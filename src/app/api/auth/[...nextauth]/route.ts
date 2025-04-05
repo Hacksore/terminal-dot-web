@@ -18,11 +18,16 @@ function TerminalProvider<P extends TerminalProfile>(
     type: "oauth",
     authorization: {
       url: `${API_URL}/authorize`,
-      params: { scope: "ligma", response_type: "code" },
+      params: {
+        scope: "ligma",
+        response_type: "code",
+        code_challenge_method: "S256",
+      },
     },
     token: {
       url: `${API_URL}/token`,
     },
+    checks: ["pkce", "state"],
     profile: async (profile) => {
       return {
         id: profile.id,
