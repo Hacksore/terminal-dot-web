@@ -3,6 +3,7 @@ import type { OAuthConfig, OAuthUserConfig } from "next-auth/providers/oauth";
 import type { JWT } from "next-auth/jwt";
 import type { Session } from "next-auth";
 import type { Account } from "next-auth";
+import { env } from "@/env";
 
 interface TerminalProfile {
   id: string;
@@ -117,20 +118,11 @@ function TerminalProvider<P extends TerminalProfile>(
   };
 }
 
-// TODO: let's replace this with t3-env so that we have typesafe env
-const getRequiredEnvVar = (name: string): string => {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-  return value;
-};
-
 export const authOptions = {
   providers: [
     TerminalProvider({
-      clientId: getRequiredEnvVar("CLIENT_ID"),
-      clientSecret: getRequiredEnvVar("CLIENT_SECRET"),
+      clientId: env.CLIENT_ID,
+      clientSecret: env.CLIENT_SECRET,
     }),
   ],
   callbacks: {
@@ -151,12 +143,8 @@ export const authOptions = {
 
       if (terminalToken.refresh_token) {
         try {
-          const clientId = process.env.CLIENT_ID;
-          const clientSecret = process.env.CLIENT_SECRET;
-
-          if (!clientId || !clientSecret) {
-            throw new Error("Missing client credentials");
-          }
+          const clientId = env.CLIENT_ID;
+          const clientSecret = env.CLIENT_SECRET;
 
           const body = new URLSearchParams();
           body.append("grant_type", "refresh_token");
