@@ -28,15 +28,10 @@ function TerminalProvider<P extends TerminalProfile>(
     userinfo: {
       async request({ tokens }) {
         const accessToken = tokens.access_token;
-        console.log("[Terminal OAuth] Userinfo request tokens:", tokens);
         if (!accessToken) {
           throw new Error("No access token provided");
         }
 
-        console.log(
-          "[Terminal OAuth] Fetching user info with access token:",
-          accessToken,
-        );
         const response = await fetch(`${API_URL}/profile`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -66,14 +61,6 @@ function TerminalProvider<P extends TerminalProfile>(
         if (!clientId) throw new Error("No client ID present");
         if (!clientSecret) throw new Error("No client secret present");
 
-        console.log("[Terminal OAuth] Token request params:", {
-          code: params.code,
-          code_verifier: checks.code_verifier,
-          grant_type: "authorization_code",
-          redirect_uri: redirectUri,
-          client_id: clientId,
-        });
-
         const body = new URLSearchParams();
         body.append("grant_type", "authorization_code");
         body.append("code", params.code);
@@ -91,7 +78,6 @@ function TerminalProvider<P extends TerminalProfile>(
         });
 
         const tokens = await response.json();
-        console.log("[Terminal OAuth] Token response:", tokens);
 
         if (!response.ok) {
           console.error("[Terminal OAuth] Token request failed:", tokens);
@@ -116,7 +102,6 @@ function TerminalProvider<P extends TerminalProfile>(
 }
 
 const handler = NextAuth({
-  debug: true,
   providers: [
     TerminalProvider({
       // biome-ignore lint/style/noNonNullAssertion: <explanation>
