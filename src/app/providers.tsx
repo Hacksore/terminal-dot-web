@@ -10,9 +10,7 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <SessionProvider>
-      <CartWrapper>
-        {children}
-      </CartWrapper>
+      <CartWrapper>{children}</CartWrapper>
     </SessionProvider>
   );
-} 
+}
