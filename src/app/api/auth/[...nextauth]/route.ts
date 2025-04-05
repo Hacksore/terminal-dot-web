@@ -1,10 +1,25 @@
 import NextAuth from "next-auth";
 import type { OAuthConfig, OAuthUserConfig } from "next-auth/providers/oauth";
+import type { JWT } from "next-auth/jwt";
+import type { Session } from "next-auth";
 
 interface TerminalProfile {
   id: string;
   name?: string;
   email?: string;
+}
+
+interface TerminalToken extends JWT {
+  access_token?: string;
+  token_type?: string;
+  expires_at?: number;
+  refresh_token?: string;
+}
+
+export interface TerminalSession extends Session {
+  access_token?: string;
+  token_type?: string;
+  expires_at?: number;
 }
 
 const AUTH_API_URL = "https://auth.terminal.shop";
@@ -101,7 +116,7 @@ function TerminalProvider<P extends TerminalProfile>(
   };
 }
 
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     TerminalProvider({
       // biome-ignore lint/style/noNonNullAssertion: <explanation>
@@ -110,6 +125,25 @@ const handler = NextAuth({
       clientSecret: process.env.CLIENT_SECRET!,
     }),
   ],
-});
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        token.access_token = account.access_token;
+        token.token_type = account.token_type;
+        token.expires_at = account.expires_at;
+        token.refresh_token = account.refresh_token;
+      }
+      return token;
+    },
+    async session({ session, token }: { session: TerminalSession; token: TerminalToken }) {
+      session.access_token = token.access_token;
+      session.token_type = token.token_type;
+      session.expires_at = token.expires_at;
+      return session;
+    },
+  },
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
