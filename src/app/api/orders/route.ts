@@ -14,7 +14,7 @@ export async function GET() {
   });
 
   // Use the access token to make requests to the Terminal API
-  const profile = await client.profile.me();
+  const orders = await client.order.list();
 
-  return NextResponse.json(profile);
+  return NextResponse.json(orders.data);
 }
