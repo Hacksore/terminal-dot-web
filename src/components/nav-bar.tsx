@@ -32,7 +32,7 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
           <button
             onClick={onCartClick}
             type="button"
-            className="relative p-2 hover:bg-zinc-800 rounded-full transition-colors"
+            className="cursor-pointer relative p-2 hover:bg-zinc-800 rounded-full transition-colors"
           >
             <ShoppingCart className="w-6 h-6" />
             {totalItems > 0 && (
