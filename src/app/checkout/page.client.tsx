@@ -40,6 +40,7 @@ export default function CheckoutPage() {
   const [showCardFields, setShowCardFields] = useState(false);
   const [isLoadingCards, setIsLoadingCards] = useState(true);
   const [isCreatingAddress, setIsCreatingAddress] = useState(false);
+  const [addressError, setAddressError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -157,6 +158,7 @@ export default function CheckoutPage() {
 
   const handleCreateAddress = async () => {
     setIsCreatingAddress(true);
+    setAddressError(null);
     try {
       const addressResponse = await fetch('/api/terminal/address/create', {
         method: 'POST',
@@ -173,8 +175,9 @@ export default function CheckoutPage() {
         }),
       });
 
+      const addressData = await addressResponse.json();
       if (!addressResponse.ok) {
-        throw new Error('Failed to create address');
+        throw new Error(addressData.error.message || 'Failed to create address');
       }
 
       // Refresh the addresses list
@@ -198,7 +201,7 @@ export default function CheckoutPage() {
       }
     } catch (error) {
       console.error('Failed to create address:', error);
-      // TODO: Add error handling UI
+      setAddressError(error instanceof Error ? error.message : 'Failed to create address');
     } finally {
       setIsCreatingAddress(false);
     }
@@ -458,6 +461,11 @@ export default function CheckoutPage() {
                     />
                   </div>
                 </div>
+                {addressError && (
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+                    <p className="text-sm text-red-500">{addressError}</p>
+                  </div>
+                )}
                 <Button
                   type="button"
                   className="w-full"

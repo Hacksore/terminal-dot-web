@@ -62,10 +62,18 @@ export async function POST(request, { params }) {
     ? resolvedParams.entity.join("/")
     : resolvedParams.entity;
 
-  // if (entityPath === "card/list") {
-  //   const cards = await client.card.list();
-  //   return NextResponse.json({ data: cards.data });
-  // }
+  if (entityPath === "card/create") {
+    try {
+      const card = await client.card.create(body);
+      return NextResponse.json({ data: card });
+    } catch (error) {
+      console.error("Error creating card:", error);
+      return NextResponse.json(
+        { error: { message: `${error}` } },
+        { status: 500 },
+      );
+    }
+  }
 
   if (entityPath === "address/create") {
     try {
@@ -74,7 +82,7 @@ export async function POST(request, { params }) {
     } catch (error) {
       console.error("Error creating address:", error);
       return NextResponse.json(
-        { error: "Failed to create address" },
+        { error: { message: `${error}` } },
         { status: 500 },
       );
     }
