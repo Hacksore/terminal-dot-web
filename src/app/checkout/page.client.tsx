@@ -58,23 +58,11 @@ export default function CheckoutPage() {
     },
   });
 
-  const createCardMutation = useMutation({
-    mutationFn: createCard,
-    onSuccess: (data) => {
-      setValue("cardId", data.id);
-      setCardError(null);
-    },
-    onError: (error) => {
-      setCardError(
-        error instanceof Error ? error.message : "Failed to create card",
-      );
-    },
-  });
-
   const onSubmit = async (data: CheckoutFormData) => {
     try {
       // Handle checkout logic here
       console.log("Checkout data:", data);
+
     } catch (error) {
       console.error("Checkout failed:", error);
     }
