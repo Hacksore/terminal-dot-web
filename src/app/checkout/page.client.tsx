@@ -150,10 +150,11 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       key={address.id}
-                      className={`w-full text-left p-4 rounded-lg border ${selectedAddressId === address.id
+                      className={`w-full text-left p-4 rounded-lg border ${
+                        selectedAddressId === address.id
                           ? "border-primary bg-primary/10"
                           : "border-zinc-700 hover:border-zinc-600"
-                        }`}
+                      }`}
                       onClick={() => setValue("addressId", address.id)}
                     >
                       <p className="font-medium">{address.name}</p>
@@ -248,10 +249,11 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       key={card.id}
-                      className={`w-full text-left p-4 rounded-lg border ${selectedCardId === card.id
+                      className={`w-full text-left p-4 rounded-lg border ${
+                        selectedCardId === card.id
                           ? "border-primary bg-primary/10"
                           : "border-zinc-700 hover:border-zinc-600"
-                        }`}
+                      }`}
                       onClick={() => setValue("cardId", card.id)}
                     >
                       <p className="font-medium">
