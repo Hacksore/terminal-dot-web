@@ -1,3 +1,4 @@
+"use server";
 import { getAccessToken } from "@/lib/auth";
 import Terminal from "@terminaldotshop/sdk";
 
@@ -6,7 +7,7 @@ interface CheckoutParams {
   addressID: string;
 }
 
-const checkout = async ({ cardID, addressID }: CheckoutParams) => {
+export const checkout = async ({ cardID, addressID }: CheckoutParams) => {
   const bearerToken = await getAccessToken();
   const client = new Terminal({
     bearerToken,

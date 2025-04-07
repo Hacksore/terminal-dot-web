@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCartStore } from "@/store/cart";
 import { useSession } from "next-auth/react";
+import { checkout } from "./action";
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
@@ -68,6 +69,12 @@ export default function CheckoutPage() {
     try {
       // Handle checkout logic here
       console.log("Checkout data:", data);
+
+      await checkout({
+        addressID: data.addressId,
+        cardID: data.cardId,
+      });
+
     } catch (error) {
       console.error("Checkout failed:", error);
     }
@@ -145,11 +152,10 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       key={address.id}
-                      className={`w-full text-left p-4 rounded-lg border ${
-                        selectedAddressId === address.id
+                      className={`w-full text-left p-4 rounded-lg border ${selectedAddressId === address.id
                           ? "border-primary bg-primary/10"
                           : "border-zinc-700 hover:border-zinc-600"
-                      }`}
+                        }`}
                       onClick={() => setValue("addressId", address.id)}
                     >
                       <p className="font-medium">{address.name}</p>
@@ -244,11 +250,10 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       key={card.id}
-                      className={`w-full text-left p-4 rounded-lg border ${
-                        selectedCardId === card.id
+                      className={`w-full text-left p-4 rounded-lg border ${selectedCardId === card.id
                           ? "border-primary bg-primary/10"
                           : "border-zinc-700 hover:border-zinc-600"
-                      }`}
+                        }`}
                       onClick={() => setValue("cardId", card.id)}
                     >
                       <p className="font-medium">

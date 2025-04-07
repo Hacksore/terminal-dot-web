@@ -9,25 +9,16 @@ export const addressSchema = z.object({
   zip: z.string().min(1, "ZIP code is required"),
 });
 
-export const cardSchema = z.object({
-  cardNumber: z.string().min(1, "Card number is required"),
-  expiryDate: z.string().min(1, "Expiry date is required"),
-  cvv: z.string().min(1, "CVV is required"),
-});
-
 export const checkoutSchema = z
   .object({
     email: z.string().email("Invalid email address"),
-    addressId: z.string().optional(),
-    cardId: z.string().optional(),
+    addressId: z.string(),
+    cardId: z.string(),
     name: z.string().optional(),
     street1: z.string().optional(),
     city: z.string().optional(),
     state: z.string().optional(),
     zip: z.string().optional(),
-    cardNumber: z.string().optional(),
-    expiryDate: z.string().optional(),
-    cvv: z.string().optional(),
   })
   .refine(
     (data) =>
