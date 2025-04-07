@@ -1,3 +1,5 @@
+import type { Terminal } from "@terminaldotshop/sdk";
+
 export interface Address {
   id: string;
   name: string;
@@ -10,10 +12,4 @@ export interface Address {
   phone?: string;
 }
 
-export interface Card {
-  id: string;
-  last4: string;
-  brand: string;
-  exp_month: number;
-  exp_year: number;
-} 
+export type Card = Terminal.Card; 

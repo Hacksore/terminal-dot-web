@@ -255,7 +255,7 @@ export default function CheckoutPage() {
                         {card.brand} ending in {card.last4}
                       </p>
                       <p className="text-sm text-zinc-400">
-                        Expires {card.exp_month}/{card.exp_year}
+                        Expires {card.expiration.month}/{card.expiration.year}
                       </p>
                     </button>
                   ))}
