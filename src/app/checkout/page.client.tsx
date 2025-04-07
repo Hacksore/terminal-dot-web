@@ -18,9 +18,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCartStore } from "@/store/cart";
 import { useSession } from "next-auth/react";
+import { checkout } from "./action";
 
 export default function CheckoutPage() {
-  const items = useCartStore((state) => state.items);
+  const cartItems = useCartStore((state) => state.items);
   const [addressError, setAddressError] = useState<string | null>(null);
   const [cardError, setCardError] = useState<string | null>(null);
   const session = useSession();
@@ -60,9 +61,16 @@ export default function CheckoutPage() {
 
   const onSubmit = async (data: CheckoutFormData) => {
     try {
-      // Handle checkout logic here
       console.log("Checkout data:", data);
-
+      const result = await checkout({
+        cardID: data.cardId,
+        addressID: data.addressId,
+        items: cartItems.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+        })),
+      });
+      console.log("Checkout result:", result);
     } catch (error) {
       console.error("Checkout failed:", error);
     }
@@ -71,7 +79,7 @@ export default function CheckoutPage() {
   const selectedAddressId = watch("addressId");
   const selectedCardId = watch("cardId");
 
-  const total = items.reduce((sum, item) => {
+  const total = cartItems.reduce((sum, item) => {
     if (!item.selectedVariant) return sum;
     return sum + item.selectedVariant.price * item.quantity;
   }, 0);
@@ -88,7 +96,7 @@ export default function CheckoutPage() {
         <div className="bg-zinc-800 rounded-lg p-6 mb-8">
           <h2 className="text-xl font-bold mb-4">Order Summary</h2>
           <div className="space-y-2">
-            {items.map((item) => (
+            {cartItems.map((item) => (
               <div key={item.id} className="flex justify-between">
                 <div>
                   <p className="font-medium">{item.name}</p>

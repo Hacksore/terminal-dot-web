@@ -141,6 +141,7 @@ export const authOptions = {
         return terminalToken;
       }
 
+      // FIXME: this is bugged and getting error refreshing token
       if (terminalToken.refresh_token) {
         try {
           const clientId = env.CLIENT_ID;
