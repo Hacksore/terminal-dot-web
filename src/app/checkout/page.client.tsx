@@ -61,7 +61,7 @@ export default function CheckoutPage() {
         cardID: data.cardId,
         addressID: data.addressId,
         items: cartItems.map((item) => ({
-          id: item.id,
+          id: item.selectedVariant?.id,
           quantity: item.quantity,
         })),
       });
@@ -72,7 +72,9 @@ export default function CheckoutPage() {
         router.push("/thank-you");
       }
 
-      console.log("Checkout result:", result);
+      console.log("Checkout result:", {
+        result,
+      });
     } catch (error) {
       console.error("Checkout failed:", error);
     }

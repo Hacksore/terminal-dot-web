@@ -6,7 +6,7 @@ interface CheckoutParams {
   cardID: string;
   addressID: string;
   items: {
-    id: string; // productVariantID
+    id?: string;
     quantity: number;
   }[];
 }

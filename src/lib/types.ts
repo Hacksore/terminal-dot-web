@@ -13,10 +13,4 @@ export interface OrderItem {
   };
 }
 
-export interface Order {
-  id: string;
-  created_at: string;
-  total: number;
-  status: string;
-  items: OrderItem[];
-}
+export type Order = Terminal.Order;
