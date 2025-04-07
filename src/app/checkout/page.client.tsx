@@ -388,6 +388,20 @@ export default function CheckoutPage() {
 
             {(!selectedCard || showCardFields) && !isLoadingCards && (
               <>
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-4">
+                  <p className="text-sm text-red-500">
+                    We do not store your credit card information but yeah this is kinda sus so maybe someone can integrate{" "}
+                    <a
+                      href="https://www.terminal.shop/pay"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-red-400"
+                    >
+                      https://www.terminal.shop/pay
+                    </a>{" "}
+                    at some point
+                  </p>
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="cardNumber">Card Number</Label>
                   <Input
