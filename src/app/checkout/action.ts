@@ -1,7 +1,6 @@
 "use server";
 import { getAccessToken } from "@/lib/auth";
 import Terminal from "@terminaldotshop/sdk";
-import { Product } from "@terminaldotshop/sdk/resources/index.mjs";
 
 interface CheckoutParams {
   cardID: string;
@@ -17,24 +16,16 @@ export const checkout = async ({
   addressID,
   items,
 }: CheckoutParams) => {
-  // diable for now
-  console.log("Checkout function called with params:", {
-    cardID,
-    addressID,
-    items,
-  });
-  return "NOT IMPLEMENTED";
-
   const bearerToken = await getAccessToken();
   const client = new Terminal({
     bearerToken,
   });
 
-  client.cart.setCard({
+  await client.cart.setCard({
     cardID,
   });
 
-  client.cart.setAddress({
+  await client.cart.setAddress({
     addressID,
   });
 
@@ -44,13 +35,13 @@ export const checkout = async ({
   }
 
   for (const item of items) {
-    client.cart.setItem({
+    await client.cart.setItem({
       productVariantID: item.id,
       quantity: item.quantity,
     });
   }
 
-  // client.cart.convert();
+  await client.cart.convert();
 
   return {
     success: true,

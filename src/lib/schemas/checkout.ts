@@ -11,7 +11,6 @@ export const addressSchema = z.object({
 
 export const checkoutSchema = z
   .object({
-    email: z.string().email("Invalid email address"),
     addressId: z.string(),
     cardId: z.string(),
     name: z.string().optional(),
