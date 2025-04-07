@@ -1,4 +1,4 @@
-import type { Address, Card } from "./types";
+import type { Address, Card, Order } from "./types";
 
 export async function getAddresses(): Promise<Address[]> {
   const response = await fetch("/api/terminal/address/list");
@@ -8,6 +8,12 @@ export async function getAddresses(): Promise<Address[]> {
 
 export async function getCards(): Promise<Card[]> {
   const response = await fetch("/api/terminal/card/list");
+  const data = await response.json();
+  return data.data || [];
+}
+
+export async function getOrders(): Promise<Order[]> {
+  const response = await fetch("/api/terminal/order/list");
   const data = await response.json();
   return data.data || [];
 }

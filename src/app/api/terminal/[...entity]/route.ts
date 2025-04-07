@@ -44,6 +44,11 @@ export async function GET(
     return NextResponse.json({ data: cards.data });
   }
 
+  if (entityPath === "order/list") {
+    const orders = await client.order.list();
+    return NextResponse.json({ data: orders.data });
+  }
+
   return NextResponse.json({ wat: 1 });
 }
 

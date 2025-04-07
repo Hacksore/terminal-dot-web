@@ -21,6 +21,14 @@ export default function ThankYouPage() {
               Please check your email for updates on your order status. If you
               have any questions, feel free to reach out to our support team.
             </p>
+            <div className="pt-4 flex justify-end">
+              <a
+                href="/orders"
+                className="inline-block bg-primary text-black px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
+                View Your Orders
+              </a>
+            </div>
           </div>
         </div>
 
