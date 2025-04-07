@@ -54,14 +54,22 @@ export default function CheckoutPage() {
   });
 
   useEffect(() => {
-    const fetchAddresses = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/terminal/address/list');
-        const data = await response.json();
-        if (data.data && data.data.length > 0) {
-          setAddresses(data.data);
+        const [addressesResponse, cardsResponse] = await Promise.all([
+          fetch('/api/terminal/address/list'),
+          fetch('/api/terminal/card/list')
+        ]);
+
+        const [addressesData, cardsData] = await Promise.all([
+          addressesResponse.json(),
+          cardsResponse.json()
+        ]);
+
+        if (addressesData.data && addressesData.data.length > 0) {
+          setAddresses(addressesData.data);
           // Pre-fill the form with the first address
-          const firstAddress = data.data[0];
+          const firstAddress = addressesData.data[0];
           setFormData(prev => ({
             ...prev,
             name: firstAddress.name,
@@ -69,21 +77,11 @@ export default function CheckoutPage() {
           }));
           setSelectedAddress(firstAddress.id);
         }
-      } catch (error) {
-        console.error('Failed to fetch addresses:', error);
-      } finally {
-        setIsLoadingAddresses(false);
-      }
-    };
 
-    const fetchCards = async () => {
-      try {
-        const response = await fetch('/api/terminal/card/list');
-        const data = await response.json();
-        if (data.data && data.data.length > 0) {
-          setCards(data.data);
+        if (cardsData.data && cardsData.data.length > 0) {
+          setCards(cardsData.data);
           // Pre-fill the form with the first card
-          const firstCard = data.data[0];
+          const firstCard = cardsData.data[0];
           setFormData(prev => ({
             ...prev,
             cardId: firstCard.id,
@@ -91,14 +89,14 @@ export default function CheckoutPage() {
           setSelectedCard(firstCard.id);
         }
       } catch (error) {
-        console.error('Failed to fetch cards:', error);
+        console.error('Failed to fetch data:', error);
       } finally {
+        setIsLoadingAddresses(false);
         setIsLoadingCards(false);
       }
     };
 
-    fetchAddresses();
-    fetchCards();
+    fetchData();
   }, []);
 
   const handleAddressSelect = (address: Address) => {
