@@ -13,10 +13,12 @@ export const CartWrapper = ({ children }: CartWrapperProps) => {
 
   return (
     <>
-      <Navbar onCartClick={(e) => {
-        e.preventDefault();
-        setIsCartOpen(true);
-      }} />
+      <Navbar
+        onCartClick={(e) => {
+          e.preventDefault();
+          setIsCartOpen(true);
+        }}
+      />
       {children}
       <CartDisplay isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>

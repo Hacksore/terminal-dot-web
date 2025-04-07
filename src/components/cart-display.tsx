@@ -109,13 +109,14 @@ export function CartDisplay({ isOpen, onClose }: CartDisplayProps) {
                   <Button
                     variant="outline"
                     className="cursor-pointer flex-1"
-                  
                     onClick={() => clearCart()}
                   >
                     Clear Cart
                   </Button>
                   <Link href="/checkout" onClick={() => onClose()}>
-                    <Button className="cursor-pointer flex-1">Proceed to Checkout</Button>
+                    <Button className="cursor-pointer flex-1">
+                      Proceed to Checkout
+                    </Button>
                   </Link>
                 </div>
               </div>

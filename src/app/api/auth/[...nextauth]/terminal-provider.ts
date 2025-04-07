@@ -1,4 +1,3 @@
-
 import type { OAuthConfig, OAuthUserConfig } from "next-auth/providers/oauth";
 import type { JWT } from "next-auth/jwt";
 import type { Session } from "next-auth";
@@ -135,7 +134,10 @@ export const authOptions = {
         return terminalToken;
       }
 
-      if (terminalToken.expires_at && Date.now() < terminalToken.expires_at * 1000) {
+      if (
+        terminalToken.expires_at &&
+        Date.now() < terminalToken.expires_at * 1000
+      ) {
         return terminalToken;
       }
 
@@ -179,7 +181,10 @@ export const authOptions = {
 
       return terminalToken;
     },
-    async session({ session, token }: { session: TerminalSession; token: TerminalToken }) {
+    async session({
+      session,
+      token,
+    }: { session: TerminalSession; token: TerminalToken }) {
       session.access_token = token.access_token;
       session.token_type = token.token_type;
       session.expires_at = token.expires_at;

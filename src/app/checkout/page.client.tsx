@@ -19,7 +19,13 @@ export default function CheckoutPage() {
   const [cardError, setCardError] = useState<string | null>(null);
   const session = useSession();
 
-  const { register, handleSubmit, formState: { errors, isSubmitting }, watch, setValue } = useForm<CheckoutFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    watch,
+    setValue,
+  } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
   });
 
@@ -40,17 +46,21 @@ export default function CheckoutPage() {
       setAddressError(null);
     },
     onError: (error) => {
-      setAddressError(error instanceof Error ? error.message : "Failed to create address");
+      setAddressError(
+        error instanceof Error ? error.message : "Failed to create address",
+      );
     },
   });
 
   const collectCardMutation = useMutation({
     mutationFn: collectCard,
     onSuccess: (data) => {
-      window.open(data.url, '_blank');
+      window.open(data.url, "_blank");
     },
     onError: (error) => {
-      setCardError(error instanceof Error ? error.message : "Failed to collect card");
+      setCardError(
+        error instanceof Error ? error.message : "Failed to collect card",
+      );
     },
   });
 
@@ -94,7 +104,11 @@ export default function CheckoutPage() {
                   )}
                 </div>
                 <p className="font-medium">
-                  ${((item.selectedVariant?.price || 0) * item.quantity / 100).toFixed(2)}
+                  $
+                  {(
+                    ((item.selectedVariant?.price || 0) * item.quantity) /
+                    100
+                  ).toFixed(2)}
                 </p>
               </div>
             ))}
@@ -122,7 +136,7 @@ export default function CheckoutPage() {
           {/* Address Selection */}
           <div className="space-y-4">
             <h2 className="text-xl font-bold">Shipping Information</h2>
-            
+
             {addresses && addresses.length > 0 && (
               <div className="space-y-2">
                 <Label>Saved Addresses</Label>
@@ -133,8 +147,8 @@ export default function CheckoutPage() {
                       key={address.id}
                       className={`w-full text-left p-4 rounded-lg border ${
                         selectedAddressId === address.id
-                          ? 'border-primary bg-primary/10'
-                          : 'border-zinc-700 hover:border-zinc-600'
+                          ? "border-primary bg-primary/10"
+                          : "border-zinc-700 hover:border-zinc-600"
                       }`}
                       onClick={() => setValue("addressId", address.id)}
                     >
@@ -164,40 +178,25 @@ export default function CheckoutPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input
-                      id="name"
-                      {...register("name")}
-                    />
+                    <Input id="name" {...register("name")} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="street1">Address</Label>
-                    <Input
-                      id="street1"
-                      {...register("street1")}
-                    />
+                    <Input id="street1" {...register("street1")} />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="city">City</Label>
-                    <Input
-                      id="city"
-                      {...register("city")}
-                    />
+                    <Input id="city" {...register("city")} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="state">State</Label>
-                    <Input
-                      id="state"
-                      {...register("state")}
-                    />
+                    <Input id="state" {...register("state")} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="zip">ZIP Code</Label>
-                    <Input
-                      id="zip"
-                      {...register("zip")}
-                    />
+                    <Input id="zip" {...register("zip")} />
                   </div>
                 </div>
                 {addressError && (
@@ -208,14 +207,16 @@ export default function CheckoutPage() {
                 <Button
                   type="button"
                   className="w-full"
-                  onClick={() => createAddressMutation.mutate({
-                    name: watch("name") || "",
-                    street1: watch("street1") || "",
-                    city: watch("city") || "",
-                    state: watch("state") || "",
-                    country: "US",
-                    zip: watch("zip") || "",
-                  })}
+                  onClick={() =>
+                    createAddressMutation.mutate({
+                      name: watch("name") || "",
+                      street1: watch("street1") || "",
+                      city: watch("city") || "",
+                      state: watch("state") || "",
+                      country: "US",
+                      zip: watch("zip") || "",
+                    })
+                  }
                   disabled={createAddressMutation.isPending}
                 >
                   {createAddressMutation.isPending ? (
@@ -224,7 +225,7 @@ export default function CheckoutPage() {
                       Creating Address...
                     </div>
                   ) : (
-                    'Save Address'
+                    "Save Address"
                   )}
                 </Button>
               </div>
@@ -234,7 +235,7 @@ export default function CheckoutPage() {
           {/* Card Selection */}
           <div className="space-y-4">
             <h2 className="text-xl font-bold">Payment Information</h2>
-            
+
             {cards && cards.length > 0 && (
               <div className="space-y-2">
                 <Label>Saved Cards</Label>
@@ -245,8 +246,8 @@ export default function CheckoutPage() {
                       key={card.id}
                       className={`w-full text-left p-4 rounded-lg border ${
                         selectedCardId === card.id
-                          ? 'border-primary bg-primary/10'
-                          : 'border-zinc-700 hover:border-zinc-600'
+                          ? "border-primary bg-primary/10"
+                          : "border-zinc-700 hover:border-zinc-600"
                       }`}
                       onClick={() => setValue("cardId", card.id)}
                     >
@@ -286,7 +287,7 @@ export default function CheckoutPage() {
                       Opening Card Collection...
                     </div>
                   ) : (
-                    'Add Payment Method'
+                    "Add Payment Method"
                   )}
                 </Button>
                 {cardError && (
@@ -298,7 +299,7 @@ export default function CheckoutPage() {
             )}
           </div>
 
-          <Button 
+          <Button
             type="submit"
             className="w-full"
             disabled={isSubmitting || !selectedAddressId || !selectedCardId}
@@ -309,9 +310,9 @@ export default function CheckoutPage() {
                 Processing...
               </div>
             ) : !selectedAddressId || !selectedCardId ? (
-              'Please select an address and payment method'
+              "Please select an address and payment method"
             ) : (
-              'Place Order'
+              "Place Order"
             )}
           </Button>
         </form>

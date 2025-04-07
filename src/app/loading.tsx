@@ -3,7 +3,7 @@ const Loading = () => {
     <div className="flex h-screen w-full items-center justify-center">
       <div className="flex items-center gap-2">
         <svg
-          aria-label="Loading spinner" 
+          aria-label="Loading spinner"
           className="h-8 w-8 animate-spin text-gray-500 dark:text-gray-400"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
