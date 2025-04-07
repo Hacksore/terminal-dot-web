@@ -61,10 +61,10 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
                   </span>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="bg-zinc-900 border-0">
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">
+                    <p className="text-base font-medium leading-none">
                       {session.user?.name}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
@@ -74,8 +74,25 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
+                  asChild
+                  className="hover:bg-primary hover:text-black"
+                >
+                  <a href="/orders" className="cursor-pointer">
+                    <span>Orders</span>
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  asChild
+                  className="hover:bg-primary hover:text-black"
+                >
+                  <a href="/checkout" className="cursor-pointer">
+                    <span>Checkout</span>
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
                   onClick={() => signOut()}
-                  className="text-red-500"
+                  className="text-red-500 hover:bg-red-500 hover:text-white"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
