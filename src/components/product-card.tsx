@@ -33,11 +33,7 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
               type="button"
               key={variant.id}
               onClick={() => setSelectedVariant(variant)}
-              className={`px-3 py-1 rounded-lg text-sm ${
-                selectedVariant?.id === variant.id
-                  ? "bg-black text-white"
-                  : "bg-zinc-800 hover:bg-zinc-700"
-              }`}
+              className="py-1 rounded-lg text-sm text-white"
             >
               {variant.name} - ${(variant.price / 100).toFixed(2)}
             </button>
@@ -47,7 +43,6 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
       <button
         type="button"
         onClick={handleAddToCart}
-        disabled={!selectedVariant}
         className="bg-primary my-2 py-2 font-bold cursor-pointer rounded-2xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Add to cart

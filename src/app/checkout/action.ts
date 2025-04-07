@@ -16,35 +16,46 @@ export const checkout = async ({
   addressID,
   items,
 }: CheckoutParams) => {
-  const bearerToken = await getAccessToken();
-  const client = new Terminal({
-    bearerToken,
-  });
-
-  await client.cart.setCard({
-    cardID,
-  });
-
-  await client.cart.setAddress({
-    addressID,
-  });
-
-  // add the items from the cart
-  if (!Array.isArray(items) || items.length === 0) {
-    throw new Error("No items provided for checkout");
-  }
-
-  for (const item of items) {
-    await client.cart.setItem({
-      productVariantID: item.id,
-      quantity: item.quantity,
+  try {
+    const bearerToken = await getAccessToken();
+    const client = new Terminal({
+      bearerToken,
     });
+
+    await client.cart.setCard({
+      cardID,
+    });
+
+    await client.cart.setAddress({
+      addressID,
+    });
+
+    // add the items from the cart
+    if (!Array.isArray(items) || items.length === 0) {
+      throw new Error("No items provided for checkout");
+    }
+
+    for (const item of items) {
+      await client.cart.setItem({
+        productVariantID: item.id,
+        quantity: item.quantity,
+      });
+    }
+
+    await client.cart.convert();
+
+    return {
+      success: true,
+      message: "Checkout initiated successfully",
+    };
+  } catch (error) {
+    console.error("Checkout error:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "An error occurred during checkout",
+    };
   }
-
-  await client.cart.convert();
-
-  return {
-    success: true,
-    message: "Checkout initiated successfully",
-  };
 };

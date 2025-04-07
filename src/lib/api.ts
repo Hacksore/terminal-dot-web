@@ -29,28 +29,6 @@ export async function createAddress(
   return data;
 }
 
-export async function createCard(
-  card: Omit<Card, "id" | "last4" | "brand" | "exp_month" | "exp_year"> & {
-    number: string;
-    exp_month: number;
-    exp_year: number;
-    cvc: string;
-  },
-): Promise<Card> {
-  const response = await fetch("/api/terminal/card/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(card),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error?.message || "Failed to create card");
-  }
-  return data;
-}
-
 export async function collectCard(): Promise<{ url: string }> {
   const response = await fetch("/api/terminal/card/collect", {
     method: "POST",
