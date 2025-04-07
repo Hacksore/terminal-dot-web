@@ -38,7 +38,6 @@ export default function OrdersPage() {
                     <h3 className="text-lg font-medium">
                       Order #{order.id.slice(0, 8)}
                     </h3>
-                    <p className="text-sm text-zinc-400">{order.created_at}</p>
                   </div>
                   <div className="text-right">
                     <a

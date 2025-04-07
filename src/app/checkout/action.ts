@@ -36,6 +36,10 @@ export const checkout = async ({
     }
 
     for (const item of items) {
+      if (!item.id) {
+        continue;
+      }
+
       await client.cart.setItem({
         productVariantID: item.id,
         quantity: item.quantity,
