@@ -158,6 +158,50 @@ export default function CheckoutPage() {
     return sum + item.selectedVariant.price * item.quantity;
   }, 0);
 
+  const isFormValid = () => {
+    // If we have a saved address, we don't need email validation
+    if (formData.addressId) {
+      // Just check if we have either a saved card or all card fields
+      return Boolean(formData.cardId) || (
+        formData.cardNumber && 
+        formData.expiryDate && 
+        formData.cvv
+      );
+    }
+
+    // If we're using a custom address, we need email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const hasValidEmail = emailRegex.test(formData.email);
+    
+    // Check if we have all address fields
+    const hasValidAddress = (
+      formData.name && 
+      formData.address && 
+      formData.city && 
+      formData.state && 
+      formData.zipCode
+    );
+
+    // Check if we have either a saved card or all card fields
+    const hasValidCard = Boolean(formData.cardId) || (
+      formData.cardNumber && 
+      formData.expiryDate && 
+      formData.cvv
+    );
+
+    console.log('Validation:', {
+      email: formData.email,
+      hasValidEmail,
+      addressId: formData.addressId,
+      hasValidAddress,
+      cardId: formData.cardId,
+      hasValidCard,
+      isValid: hasValidEmail && hasValidAddress && hasValidCard
+    });
+
+    return hasValidEmail && hasValidAddress && hasValidCard;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically:
@@ -442,7 +486,11 @@ export default function CheckoutPage() {
             )}
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button 
+            type="submit" 
+            className="w-full"
+            disabled={!isFormValid()}
+          >
             Place Order
           </Button>
         </form>
