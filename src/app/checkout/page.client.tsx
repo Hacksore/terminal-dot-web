@@ -39,14 +39,16 @@ export default function CheckoutPage() {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const [showCardFields, setShowCardFields] = useState(false);
   const [isLoadingCards, setIsLoadingCards] = useState(true);
+  const [isCreatingAddress, setIsCreatingAddress] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     addressId: "",
-    address: "",
+    street1: "",
     city: "",
     state: "",
-    zipCode: "",
+    country: "US",
+    zip: "",
     cardId: "",
     cardNumber: "",
     expiryDate: "",
@@ -107,10 +109,10 @@ export default function CheckoutPage() {
       name: address.name,
       addressId: address.id,
       // Clear the address fields since we're using a saved address
-      address: "",
+      street1: "",
       city: "",
       state: "",
-      zipCode: "",
+      zip: "",
     }));
   };
 
@@ -134,10 +136,10 @@ export default function CheckoutPage() {
       ...prev,
       name: "",
       addressId: "",
-      address: "",
+      street1: "",
       city: "",
       state: "",
-      zipCode: "",
+      zip: "",
     }));
   };
 
@@ -151,6 +153,55 @@ export default function CheckoutPage() {
       expiryDate: "",
       cvv: "",
     }));
+  };
+
+  const handleCreateAddress = async () => {
+    setIsCreatingAddress(true);
+    try {
+      const addressResponse = await fetch('/api/terminal/address/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          street1: formData.street1,
+          city: formData.city,
+          state: formData.state,
+          country: formData.country,
+          zip: formData.zip,
+        }),
+      });
+
+      if (!addressResponse.ok) {
+        throw new Error('Failed to create address');
+      }
+
+      // Refresh the addresses list
+      const addressesResponse = await fetch('/api/terminal/address/list');
+      const addressesData = await addressesResponse.json();
+      if (addressesData.data) {
+        setAddresses(addressesData.data);
+        // Select the newly created address
+        const newAddress = addressesData.data[addressesData.data.length - 1];
+        setSelectedAddress(newAddress.id);
+        setFormData(prev => ({
+          ...prev,
+          name: newAddress.name,
+          addressId: newAddress.id,
+          street1: "",
+          city: "",
+          state: "",
+          zip: "",
+        }));
+        setShowAddressFields(false);
+      }
+    } catch (error) {
+      console.error('Failed to create address:', error);
+      // TODO: Add error handling UI
+    } finally {
+      setIsCreatingAddress(false);
+    }
   };
 
   const total = items.reduce((sum, item) => {
@@ -176,10 +227,10 @@ export default function CheckoutPage() {
     // Check if we have all address fields
     const hasValidAddress = (
       formData.name && 
-      formData.address && 
+      formData.street1 && 
       formData.city && 
       formData.state && 
-      formData.zipCode
+      formData.zip
     );
 
     // Check if we have either a saved card or all card fields
@@ -204,29 +255,54 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically:
-    // 1. Validate the form data
-    // 2. Process the payment
-    // 3. Create the order
-    // 4. Clear the cart
-    // 5. Redirect to a success page
 
-    const checkoutData = {
-      ...formData,
-      // Only include address fields if we're not using a saved address
-      ...(formData.addressId ? {} : {
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        zipCode: formData.zipCode,
-      }),
-    };
+    try {
+      let addressId = formData.addressId;
 
-    console.log("Form submitted", checkoutData);
+      // If we don't have a saved address, create a new one
+      if (!addressId) {
+        const addressResponse = await fetch('/api/terminal/address/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            street1: formData.street1,
+            city: formData.city,
+            state: formData.state,
+            country: formData.country,
+            zip: formData.zip,
+          }),
+        });
 
-    // For now, we'll just clear the cart and redirect
-    // clearCart();
-    // router.push("/");
+        const addressData = await addressResponse.json();
+        if (!addressResponse.ok) {
+          throw new Error('Failed to create address');
+        }
+        addressId = addressData.id;
+      }
+
+      const checkoutData = {
+        ...formData,
+        addressId,
+        // Only include card fields if we're not using a saved card
+        ...(formData.cardId ? {} : {
+          cardNumber: formData.cardNumber,
+          expiryDate: formData.expiryDate,
+          cvv: formData.cvv,
+        }),
+      };
+
+      console.log("Form submitted", checkoutData);
+
+      // For now, we'll just clear the cart and redirect
+      // clearCart();
+      // router.push("/");
+    } catch (error) {
+      console.error('Checkout failed:', error);
+      // TODO: Add error handling UI
+    }
   };
 
   return (
@@ -337,13 +413,13 @@ export default function CheckoutPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="street1">Address</Label>
                   <Input
-                    id="address"
+                    id="street1"
                     required
-                    value={formData.address}
+                    value={formData.street1}
                     onChange={(e) =>
-                      setFormData({ ...formData, address: e.target.value })
+                      setFormData({ ...formData, street1: e.target.value })
                     }
                   />
                 </div>
@@ -371,17 +447,32 @@ export default function CheckoutPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="zipCode">ZIP Code</Label>
+                    <Label htmlFor="zip">ZIP Code</Label>
                     <Input
-                      id="zipCode"
+                      id="zip"
                       required
-                      value={formData.zipCode}
+                      value={formData.zip}
                       onChange={(e) =>
-                        setFormData({ ...formData, zipCode: e.target.value })
+                        setFormData({ ...formData, zip: e.target.value })
                       }
                     />
                   </div>
                 </div>
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={handleCreateAddress}
+                  disabled={isCreatingAddress || !formData.name || !formData.street1 || !formData.city || !formData.state || !formData.zip}
+                >
+                  {isCreatingAddress ? (
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                      Creating Address...
+                    </div>
+                  ) : (
+                    'Save Address'
+                  )}
+                </Button>
               </>
             )}
           </div>

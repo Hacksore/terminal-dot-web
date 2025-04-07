@@ -13,11 +13,17 @@ export async function GET(_, { params }) {
     bearerToken,
   });
 
-  if (!params?.entity) {
-    return NextResponse.json({ error: "Entity parameter is required" }, { status: 400 });
+  const resolvedParams = await params;
+  if (!resolvedParams?.entity) {
+    return NextResponse.json(
+      { error: "Entity parameter is required" },
+      { status: 400 },
+    );
   }
 
-  const entityPath = Array.isArray(params.entity) ? params.entity.join("/") : params.entity;
+  const entityPath = Array.isArray(resolvedParams.entity)
+    ? resolvedParams.entity.join("/")
+    : resolvedParams.entity;
 
   if (entityPath === "card/list") {
     const cards = await client.card.list();
@@ -34,7 +40,7 @@ export async function GET(_, { params }) {
 
 export async function POST(request, { params }) {
   const bearerToken = await getAccessToken();
-
+  const resolvedParams = await params;
   const body = await request.json().catch(() => null);
 
   if (!bearerToken) {
@@ -45,11 +51,16 @@ export async function POST(request, { params }) {
     bearerToken,
   });
 
-  if (!params?.entity) {
-    return NextResponse.json({ error: "Entity parameter is required" }, { status: 400 });
+  if (!resolvedParams?.entity) {
+    return NextResponse.json(
+      { error: "Entity parameter is required" },
+      { status: 400 },
+    );
   }
 
-  const entityPath = Array.isArray(params.entity) ? params.entity.join("/") : params.entity;
+  const entityPath = Array.isArray(resolvedParams.entity)
+    ? resolvedParams.entity.join("/")
+    : resolvedParams.entity;
 
   // if (entityPath === "card/list") {
   //   const cards = await client.card.list();
@@ -57,8 +68,16 @@ export async function POST(request, { params }) {
   // }
 
   if (entityPath === "address/create") {
-    const card = await client.address.create(body);
-    return NextResponse.json({ data: card });
+    try {
+      const card = await client.address.create(body);
+      return NextResponse.json({ data: card });
+    } catch (error) {
+      console.error("Error creating address:", error);
+      return NextResponse.json(
+        { error: "Failed to create address" },
+        { status: 500 },
+      );
+    }
   }
 
   return NextResponse.json({ entity: params.entity });
