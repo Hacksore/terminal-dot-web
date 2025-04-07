@@ -4,6 +4,7 @@ import type { JWT } from "next-auth/jwt";
 import type { Session } from "next-auth";
 import type { Account } from "next-auth";
 import { env } from "@/env";
+import { API_URL, AUTH_API_URL } from "@/lib/constants";
 
 interface TerminalProfile {
   id: string;
@@ -23,9 +24,6 @@ export interface TerminalSession extends Session {
   token_type?: string;
   expires_at?: number;
 }
-
-const AUTH_API_URL = "https://auth.terminal.shop";
-const API_URL = "https://api.terminal.shop";
 
 function TerminalProvider<P extends TerminalProfile>(
   options: OAuthUserConfig<P>,

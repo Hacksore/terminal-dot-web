@@ -1,4 +1,5 @@
 import { getAccessToken } from "@/lib/auth";
+import { API_URL } from "@/lib/constants";
 import Terminal from "@terminaldotshop/sdk";
 import { NextResponse } from "next/server";
 
@@ -62,10 +63,21 @@ export async function POST(request, { params }) {
     ? resolvedParams.entity.join("/")
     : resolvedParams.entity;
 
-  if (entityPath === "card/create") {
+  if (entityPath === "card/collect") {
     try {
-      const card = await client.card.create(body);
-      return NextResponse.json({ data: card });
+      const response = await fetch(`${API_URL}/card/collect`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      });
+      return NextResponse.json(response);
     } catch (error) {
       console.error("Error creating card:", error);
       return NextResponse.json(

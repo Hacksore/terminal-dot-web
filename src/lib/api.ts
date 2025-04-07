@@ -45,4 +45,18 @@ export async function createCard(card: Omit<Card, 'id' | 'last4' | 'brand' | 'ex
     throw new Error(data.error?.message || 'Failed to create card');
   }
   return data;
+}
+
+export async function collectCard(): Promise<{ url: string }> {
+  const response = await fetch('/api/terminal/card/collect', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error?.message || 'Failed to collect card');
+  }
+  return data.data;
 } 

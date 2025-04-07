@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import type { CheckoutFormData } from "@/lib/schemas/checkout";
 import { checkoutSchema } from "@/lib/schemas/checkout";
-import { createAddress, createCard, getAddresses, getCards } from "@/lib/api";
+import { createAddress, collectCard, getAddresses, getCards } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,14 +44,13 @@ export default function CheckoutPage() {
     },
   });
 
-  const createCardMutation = useMutation({
-    mutationFn: createCard,
+  const collectCardMutation = useMutation({
+    mutationFn: collectCard,
     onSuccess: (data) => {
-      setValue("cardId", data.id);
-      setCardError(null);
+      window.open(data.url, '_blank');
     },
     onError: (error) => {
-      setCardError(error instanceof Error ? error.message : "Failed to create card");
+      setCardError(error instanceof Error ? error.message : "Failed to collect card");
     },
   });
 
@@ -275,44 +274,21 @@ export default function CheckoutPage() {
 
             {!selectedCardId && (
               <div className="space-y-4">
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-4">
-                  <p className="text-sm text-red-500">
-                    We do not store your credit card information but yeah this is kinda sus so maybe someone can integrate{" "}
-                    <a
-                      href="https://www.terminal.shop/pay"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline hover:text-red-400"
-                    >
-                      https://www.terminal.shop/pay
-                    </a>{" "}
-                    at some point
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="cardNumber">Card Number</Label>
-                  <Input
-                    id="cardNumber"
-                    {...register("cardNumber")}
-                  />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="expiryDate">Expiry Date</Label>
-                    <Input
-                      id="expiryDate"
-                      placeholder="MM/YY"
-                      {...register("expiryDate")}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="cvv">CVV</Label>
-                    <Input
-                      id="cvv"
-                      {...register("cvv")}
-                    />
-                  </div>
-                </div>
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={() => collectCardMutation.mutate()}
+                  disabled={collectCardMutation.isPending}
+                >
+                  {collectCardMutation.isPending ? (
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                      Opening Card Collection...
+                    </div>
+                  ) : (
+                    'Add Payment Method'
+                  )}
+                </Button>
                 {cardError && (
                   <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
                     <p className="text-sm text-red-500">{cardError}</p>
@@ -325,13 +301,15 @@ export default function CheckoutPage() {
           <Button 
             type="submit"
             className="w-full"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !selectedAddressId || !selectedCardId}
           >
             {isSubmitting ? (
               <div className="flex items-center justify-center">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
                 Processing...
               </div>
+            ) : !selectedAddressId || !selectedCardId ? (
+              'Please select an address and payment method'
             ) : (
               'Place Order'
             )}
