@@ -17,23 +17,16 @@ export const checkoutSchema = z
     name: z.string().optional(),
     street1: z.string().optional(),
     city: z.string().optional(),
-    state: z.string().optional(),
+    province: z.string().optional(),
     zip: z.string().optional(),
   })
   .refine(
     (data) =>
       data.addressId ||
-      (data.name && data.street1 && data.city && data.state && data.zip),
+      (data.name && data.street1 && data.city && data.province && data.zip),
     {
       message: "Either select a saved address or fill in all address fields",
       path: ["address"],
-    },
-  )
-  .refine(
-    (data) => data.cardId || (data.cardNumber && data.expiryDate && data.cvv),
-    {
-      message: "Either select a saved card or fill in all card fields",
-      path: ["card"],
     },
   );
 

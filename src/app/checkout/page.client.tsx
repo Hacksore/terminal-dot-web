@@ -6,13 +6,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import type { CheckoutFormData } from "@/lib/schemas/checkout";
 import { checkoutSchema } from "@/lib/schemas/checkout";
-import { createAddress, collectCard, getAddresses, getCards } from "@/lib/api";
+import {
+  createAddress,
+  createCard,
+  getAddresses,
+  getCards,
+  collectCard,
+} from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCartStore } from "@/store/cart";
 import { useSession } from "next-auth/react";
-import { checkout } from "./action";
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
@@ -53,14 +58,15 @@ export default function CheckoutPage() {
     },
   });
 
-  const collectCardMutation = useMutation({
-    mutationFn: collectCard,
+  const createCardMutation = useMutation({
+    mutationFn: createCard,
     onSuccess: (data) => {
-      window.open(data.url, "_blank");
+      setValue("cardId", data.id);
+      setCardError(null);
     },
     onError: (error) => {
       setCardError(
-        error instanceof Error ? error.message : "Failed to collect card",
+        error instanceof Error ? error.message : "Failed to create card",
       );
     },
   });
@@ -69,12 +75,6 @@ export default function CheckoutPage() {
     try {
       // Handle checkout logic here
       console.log("Checkout data:", data);
-
-      await checkout({
-        addressID: data.addressId,
-        cardID: data.cardId,
-      });
-
     } catch (error) {
       console.error("Checkout failed:", error);
     }
@@ -152,16 +152,17 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       key={address.id}
-                      className={`w-full text-left p-4 rounded-lg border ${selectedAddressId === address.id
+                      className={`w-full text-left p-4 rounded-lg border ${
+                        selectedAddressId === address.id
                           ? "border-primary bg-primary/10"
                           : "border-zinc-700 hover:border-zinc-600"
-                        }`}
+                      }`}
                       onClick={() => setValue("addressId", address.id)}
                     >
                       <p className="font-medium">{address.name}</p>
                       <p>{address.street1}</p>
                       <p>
-                        {address.city}, {address.state} {address.zip}
+                        {address.city}, {address.province} {address.zip}
                       </p>
                     </button>
                   ))}
@@ -197,8 +198,8 @@ export default function CheckoutPage() {
                     <Input id="city" {...register("city")} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="state">State</Label>
-                    <Input id="state" {...register("state")} />
+                    <Label htmlFor="province">State</Label>
+                    <Input id="province" {...register("province")} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="zip">ZIP Code</Label>
@@ -218,7 +219,7 @@ export default function CheckoutPage() {
                       name: watch("name") || "",
                       street1: watch("street1") || "",
                       city: watch("city") || "",
-                      state: watch("state") || "",
+                      province: watch("province") || "",
                       country: "US",
                       zip: watch("zip") || "",
                     })
@@ -250,10 +251,11 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       key={card.id}
-                      className={`w-full text-left p-4 rounded-lg border ${selectedCardId === card.id
+                      className={`w-full text-left p-4 rounded-lg border ${
+                        selectedCardId === card.id
                           ? "border-primary bg-primary/10"
                           : "border-zinc-700 hover:border-zinc-600"
-                        }`}
+                      }`}
                       onClick={() => setValue("cardId", card.id)}
                     >
                       <p className="font-medium">
@@ -283,17 +285,20 @@ export default function CheckoutPage() {
                 <Button
                   type="button"
                   className="w-full"
-                  onClick={() => collectCardMutation.mutate()}
-                  disabled={collectCardMutation.isPending}
+                  onClick={async () => {
+                    try {
+                      const { url } = await collectCard();
+                      window.open(url, "_blank");
+                    } catch (error) {
+                      setCardError(
+                        error instanceof Error
+                          ? error.message
+                          : "Failed to collect card",
+                      );
+                    }
+                  }}
                 >
-                  {collectCardMutation.isPending ? (
-                    <div className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                      Opening Card Collection...
-                    </div>
-                  ) : (
-                    "Add Payment Method"
-                  )}
+                  Add New Card
                 </Button>
                 {cardError && (
                   <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">

@@ -1,9 +1,17 @@
 import { getAccessToken } from "@/lib/auth";
 import { API_URL } from "@/lib/constants";
 import Terminal from "@terminaldotshop/sdk";
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-export async function GET(_, { params }) {
+type Params = {
+  entity: string;
+};
+
+export async function GET(
+  _: NextRequest,
+  { params }: { params: Promise<Params> },
+) {
   const bearerToken = await getAccessToken();
 
   if (!bearerToken) {
@@ -36,10 +44,13 @@ export async function GET(_, { params }) {
     return NextResponse.json({ data: cards.data });
   }
 
-  return NextResponse.json({ entity: params.entity });
+  return NextResponse.json({ wat: 1 });
 }
 
-export async function POST(request, { params }) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<Params> },
+) {
   const bearerToken = await getAccessToken();
   const resolvedParams = await params;
   const body = await request.json().catch(() => null);
@@ -100,5 +111,5 @@ export async function POST(request, { params }) {
     }
   }
 
-  return NextResponse.json({ entity: params.entity });
+  return NextResponse.json({ wat: 1 });
 }
