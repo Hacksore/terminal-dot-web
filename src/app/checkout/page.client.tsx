@@ -2,18 +2,34 @@
 
 import { useCartStore } from "@/store/cart";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
+interface Address {
+  id: string;
+  name: string;
+  street1: string;
+  street2: string;
+  city: string;
+  province: string;
+  country: string;
+  zip: string;
+  phone: string;
+}
 
 export default function CheckoutPage() {
   const router = useRouter();
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+  const [showAddressFields, setShowAddressFields] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    addressId: "",
     address: "",
     city: "",
     state: "",
@@ -22,6 +38,59 @@ export default function CheckoutPage() {
     expiryDate: "",
     cvv: "",
   });
+
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const response = await fetch('/api/terminal/address/list');
+        const data = await response.json();
+        if (data.data && data.data.length > 0) {
+          setAddresses(data.data);
+          // Pre-fill the form with the first address
+          const firstAddress = data.data[0];
+          setFormData(prev => ({
+            ...prev,
+            name: firstAddress.name,
+            addressId: firstAddress.id,
+          }));
+          setSelectedAddress(firstAddress.id);
+        }
+      } catch (error) {
+        console.error('Failed to fetch addresses:', error);
+      }
+    };
+
+    fetchAddresses();
+  }, []);
+
+  const handleAddressSelect = (address: Address) => {
+    setSelectedAddress(address.id);
+    setShowAddressFields(false);
+    setFormData(prev => ({
+      ...prev,
+      name: address.name,
+      addressId: address.id,
+      // Clear the address fields since we're using a saved address
+      address: "",
+      city: "",
+      state: "",
+      zipCode: "",
+    }));
+  };
+
+  const handleUseDifferentAddress = () => {
+    setSelectedAddress(null);
+    setShowAddressFields(true);
+    setFormData(prev => ({
+      ...prev,
+      name: "",
+      addressId: "",
+      address: "",
+      city: "",
+      state: "",
+      zipCode: "",
+    }));
+  };
 
   const total = items.reduce((sum, item) => {
     if (!item.selectedVariant) return sum;
@@ -37,7 +106,18 @@ export default function CheckoutPage() {
     // 4. Clear the cart
     // 5. Redirect to a success page
 
-    console.log("Form submitted", formData);
+    const checkoutData = {
+      ...formData,
+      // Only include address fields if we're not using a saved address
+      ...(formData.addressId ? {} : {
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        zipCode: formData.zipCode,
+      }),
+    };
+
+    console.log("Form submitted", checkoutData);
 
     // For now, we'll just clear the cart and redirect
     // clearCart();
@@ -83,77 +163,118 @@ export default function CheckoutPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <h2 className="text-xl font-bold">Shipping Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            {addresses.length > 0 && (
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  required
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                />
+                <Label>Saved Addresses</Label>
+                <div className="space-y-2">
+                  {addresses.map((address) => (
+                    <button
+                      type="button"
+                      key={address.id}
+                      className={`w-full text-left p-4 rounded-lg border ${
+                        selectedAddress === address.id
+                          ? 'border-primary bg-primary/10'
+                          : 'border-zinc-700 hover:border-zinc-600'
+                      }`}
+                      onClick={() => handleAddressSelect(address)}
+                    >
+                      <p className="font-medium">{address.name}</p>
+                      <p>{address.street1}</p>
+                      <p>
+                        {address.city}, {address.province} {address.zip}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+                {selectedAddress && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={handleUseDifferentAddress}
+                  >
+                    Use Different Address
+                  </Button>
+                )}
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
-              <Input
-                id="address"
-                required
-                value={formData.address}
-                onChange={(e) =>
-                  setFormData({ ...formData, address: e.target.value })
-                }
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  required
-                  value={formData.city}
-                  onChange={(e) =>
-                    setFormData({ ...formData, city: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="state">State</Label>
-                <Input
-                  id="state"
-                  required
-                  value={formData.state}
-                  onChange={(e) =>
-                    setFormData({ ...formData, state: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="zipCode">ZIP Code</Label>
-                <Input
-                  id="zipCode"
-                  required
-                  value={formData.zipCode}
-                  onChange={(e) =>
-                    setFormData({ ...formData, zipCode: e.target.value })
-                  }
-                />
-              </div>
-            </div>
+            )}
+
+            {(!selectedAddress || showAddressFields) && (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input
+                      id="name"
+                      required
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      type="email"
+                      id="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="address">Address</Label>
+                  <Input
+                    id="address"
+                    required
+                    value={formData.address}
+                    onChange={(e) =>
+                      setFormData({ ...formData, address: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City</Label>
+                    <Input
+                      id="city"
+                      required
+                      value={formData.city}
+                      onChange={(e) =>
+                        setFormData({ ...formData, city: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state">State</Label>
+                    <Input
+                      id="state"
+                      required
+                      value={formData.state}
+                      onChange={(e) =>
+                        setFormData({ ...formData, state: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="zipCode">ZIP Code</Label>
+                    <Input
+                      id="zipCode"
+                      required
+                      value={formData.zipCode}
+                      onChange={(e) =>
+                        setFormData({ ...formData, zipCode: e.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="space-y-4">
