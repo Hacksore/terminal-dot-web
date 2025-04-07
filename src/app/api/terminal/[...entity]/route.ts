@@ -19,7 +19,7 @@ export async function GET(_, { params }) {
 
   const entityPath = Array.isArray(params.entity) ? params.entity.join("/") : params.entity;
 
-  if (entityPath === "cards/list") {
+  if (entityPath === "card/list") {
     const cards = await client.card.list();
     return NextResponse.json({ data: cards.data });
   }

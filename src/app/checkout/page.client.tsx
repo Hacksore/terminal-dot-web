@@ -19,13 +19,26 @@ interface Address {
   phone: string;
 }
 
+interface Card {
+  id: string;
+  last4: string;
+  brand: string;
+  exp_month: number;
+  exp_year: number;
+}
+
 export default function CheckoutPage() {
+  const router = useRouter();
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [showAddressFields, setShowAddressFields] = useState(false);
   const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
+  const [cards, setCards] = useState<Card[]>([]);
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [showCardFields, setShowCardFields] = useState(false);
+  const [isLoadingCards, setIsLoadingCards] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,6 +47,7 @@ export default function CheckoutPage() {
     city: "",
     state: "",
     zipCode: "",
+    cardId: "",
     cardNumber: "",
     expiryDate: "",
     cvv: "",
@@ -62,7 +76,29 @@ export default function CheckoutPage() {
       }
     };
 
+    const fetchCards = async () => {
+      try {
+        const response = await fetch('/api/terminal/card/list');
+        const data = await response.json();
+        if (data.data && data.data.length > 0) {
+          setCards(data.data);
+          // Pre-fill the form with the first card
+          const firstCard = data.data[0];
+          setFormData(prev => ({
+            ...prev,
+            cardId: firstCard.id,
+          }));
+          setSelectedCard(firstCard.id);
+        }
+      } catch (error) {
+        console.error('Failed to fetch cards:', error);
+      } finally {
+        setIsLoadingCards(false);
+      }
+    };
+
     fetchAddresses();
+    fetchCards();
   }, []);
 
   const handleAddressSelect = (address: Address) => {
@@ -80,6 +116,19 @@ export default function CheckoutPage() {
     }));
   };
 
+  const handleCardSelect = (card: Card) => {
+    setSelectedCard(card.id);
+    setShowCardFields(false);
+    setFormData(prev => ({
+      ...prev,
+      cardId: card.id,
+      // Clear the card fields since we're using a saved card
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
+    }));
+  };
+
   const handleUseDifferentAddress = () => {
     setSelectedAddress(null);
     setShowAddressFields(true);
@@ -91,6 +140,18 @@ export default function CheckoutPage() {
       city: "",
       state: "",
       zipCode: "",
+    }));
+  };
+
+  const handleUseDifferentCard = () => {
+    setSelectedCard(null);
+    setShowCardFields(true);
+    setFormData(prev => ({
+      ...prev,
+      cardId: "",
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
     }));
   };
 
@@ -285,42 +346,88 @@ export default function CheckoutPage() {
 
           <div className="space-y-4">
             <h2 className="text-xl font-bold">Payment Information</h2>
-            <div className="space-y-2">
-              <Label htmlFor="cardNumber">Card Number</Label>
-              <Input
-                id="cardNumber"
-                required
-                value={formData.cardNumber}
-                onChange={(e) =>
-                  setFormData({ ...formData, cardNumber: e.target.value })
-                }
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="expiryDate">Expiry Date</Label>
-                <Input
-                  id="expiryDate"
-                  placeholder="MM/YY"
-                  required
-                  value={formData.expiryDate}
-                  onChange={(e) =>
-                    setFormData({ ...formData, expiryDate: e.target.value })
-                  }
-                />
+            
+            {isLoadingCards ? (
+              <div className="flex items-center justify-center p-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
               </div>
+            ) : cards.length > 0 ? (
               <div className="space-y-2">
-                <Label htmlFor="cvv">CVV</Label>
-                <Input
-                  id="cvv"
-                  required
-                  value={formData.cvv}
-                  onChange={(e) =>
-                    setFormData({ ...formData, cvv: e.target.value })
-                  }
-                />
+                <Label>Saved Cards</Label>
+                <div className="space-y-2">
+                  {cards.map((card) => (
+                    <button
+                      type="button"
+                      key={card.id}
+                      className={`w-full text-left p-4 rounded-lg border ${
+                        selectedCard === card.id
+                          ? 'border-primary bg-primary/10'
+                          : 'border-zinc-700 hover:border-zinc-600'
+                      }`}
+                      onClick={() => handleCardSelect(card)}
+                    >
+                      <p className="font-medium">
+                        {card.brand} ending in {card.last4}
+                      </p>
+                      <p className="text-sm text-zinc-400">
+                        Expires {card.exp_month}/{card.exp_year}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+                {selectedCard && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={handleUseDifferentCard}
+                  >
+                    Use Different Card
+                  </Button>
+                )}
               </div>
-            </div>
+            ) : null}
+
+            {(!selectedCard || showCardFields) && !isLoadingCards && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="cardNumber">Card Number</Label>
+                  <Input
+                    id="cardNumber"
+                    required
+                    value={formData.cardNumber}
+                    onChange={(e) =>
+                      setFormData({ ...formData, cardNumber: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="expiryDate">Expiry Date</Label>
+                    <Input
+                      id="expiryDate"
+                      placeholder="MM/YY"
+                      required
+                      value={formData.expiryDate}
+                      onChange={(e) =>
+                        setFormData({ ...formData, expiryDate: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="cvv">CVV</Label>
+                    <Input
+                      id="cvv"
+                      required
+                      value={formData.cvv}
+                      onChange={(e) =>
+                        setFormData({ ...formData, cvv: e.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           <Button type="submit" className="w-full">
