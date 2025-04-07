@@ -20,12 +20,12 @@ interface Address {
 }
 
 export default function CheckoutPage() {
-  const router = useRouter();
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [showAddressFields, setShowAddressFields] = useState(false);
+  const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -57,6 +57,8 @@ export default function CheckoutPage() {
         }
       } catch (error) {
         console.error('Failed to fetch addresses:', error);
+      } finally {
+        setIsLoadingAddresses(false);
       }
     };
 
@@ -164,7 +166,11 @@ export default function CheckoutPage() {
           <div className="space-y-4">
             <h2 className="text-xl font-bold">Shipping Information</h2>
             
-            {addresses.length > 0 && (
+            {isLoadingAddresses ? (
+              <div className="flex items-center justify-center p-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+              </div>
+            ) : addresses.length > 0 ? (
               <div className="space-y-2">
                 <Label>Saved Addresses</Label>
                 <div className="space-y-2">
@@ -198,9 +204,9 @@ export default function CheckoutPage() {
                   </Button>
                 )}
               </div>
-            )}
+            ) : null}
 
-            {(!selectedAddress || showAddressFields) && (
+            {(!selectedAddress || showAddressFields) && !isLoadingAddresses && (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
