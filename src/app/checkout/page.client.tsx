@@ -7,16 +7,17 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import type { CheckoutFormData } from "@/lib/schemas/checkout";
 import { checkoutSchema } from "@/lib/schemas/checkout";
 import { createAddress, createCard, getAddresses, getCards } from "@/lib/api";
-import type { Address, Card } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCartStore } from "@/store/cart";
+import { useSession } from "next-auth/react";
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
   const [addressError, setAddressError] = useState<string | null>(null);
   const [cardError, setCardError] = useState<string | null>(null);
+  const session = useSession();
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, watch, setValue } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
@@ -114,11 +115,9 @@ export default function CheckoutPage() {
             <Input
               type="email"
               id="email"
-              {...register("email")}
+              value={session.data?.user?.email || ""}
+              disabled
             />
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
           </div>
 
           {/* Address Selection */}
