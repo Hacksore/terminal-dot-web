@@ -1,4 +1,5 @@
 import { metadata as allMetadata } from "../metadata";
+import Link from "next/link";
 
 export const metadata = {
   ...allMetadata,
@@ -22,23 +23,23 @@ export default function ThankYouPage() {
               have any questions, feel free to reach out to our support team.
             </p>
             <div className="pt-4 flex justify-end">
-              <a
+              <Link
                 href="/orders"
                 className="inline-block bg-primary text-black px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
               >
                 View Your Orders
-              </a>
+              </Link>
             </div>
           </div>
         </div>
 
         <div className="flex justify-center">
-          <a
+          <Link
             href="/"
             className="text-primary hover:text-primary/80 transition-colors"
           >
             Return to Home
-          </a>
+          </Link>
         </div>
       </div>
     </div>
