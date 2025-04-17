@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/react"
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -24,6 +25,7 @@ export default function RootLayout({
           <div className="flex-1">{children}</div>
           <Footer />
           <Toaster />
+          <Analytics />
         </Providers>
       </body>
     </html>
