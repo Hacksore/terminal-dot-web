@@ -7,6 +7,7 @@ import type {
 } from "@terminaldotshop/sdk/resources/product";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   sku: Product;
@@ -15,6 +16,7 @@ interface ProductCardProps {
 export const ProductCard = ({ sku }: ProductCardProps) => {
   const addItem = useCartStore((state) => state.addItem);
   const { toast } = useToast();
+  const router = useRouter();
   const [selectedVariant, setSelectedVariant] = useState<
     ProductVariant | undefined
   >(sku.variants[0]);
@@ -25,6 +27,10 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
     toast({
       title: "Added to cart",
       description: `${sku.name} has been added to your cart.`,
+      onClick: (event) => {
+        event.preventDefault();
+        router.push("/checkout");
+      },
     });
   };
 

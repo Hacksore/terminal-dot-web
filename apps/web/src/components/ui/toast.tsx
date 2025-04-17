@@ -44,8 +44,9 @@ const Toast = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants> & {
       duration?: number;
+      onClick?: (event: React.MouseEvent) => void;
     }
->(({ className, variant, duration = 2000, ...props }, ref) => {
+>(({ className, variant, duration = 2000, onClick, ...props }, ref) => {
   const [open, setOpen] = React.useState(true);
   const timerRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
 
@@ -74,6 +75,7 @@ const Toast = React.forwardRef<
       ref={ref}
       open={open}
       onOpenChange={setOpen}
+      onClick={onClick}
       className={cn(toastVariants({ variant }), className)}
       {...props}
     />
