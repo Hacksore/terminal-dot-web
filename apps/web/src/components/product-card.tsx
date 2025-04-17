@@ -23,7 +23,7 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 max-w-2xl rounded-2xl px-4 py-2 border border-zinc-700">
+    <div className="flex flex-col gap-4 max-w-2xl rounded-2xl p-4 border border-zinc-700">
       <div className="flex justify-between items-start">
         <h1 className="text-3xl font-bold">{sku.name}</h1>
         <div className="px-3 py-1 rounded-full font-bold text-sm text-white border border-zinc-700">
@@ -46,7 +46,7 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
       <button
         type="button"
         onClick={handleAddToCart}
-        className="bg-primary my-2 py-2 font-bold cursor-pointer rounded-2xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-primary py-2 font-bold cursor-pointer rounded-2xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Add to cart
       </button>
