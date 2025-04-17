@@ -36,7 +36,7 @@ export function CartDisplay({ isOpen, onClose }: CartDisplayProps) {
         }
       }}
     >
-      <DialogContent className="sm:max-w-[425px] bg-background">
+      <DialogContent className="sm:max-w-[425px] bg-background max-w-[calc(100%-2rem)] mx-auto">
         <DialogHeader>
           <DialogTitle>Shopping Cart</DialogTitle>
         </DialogHeader>
