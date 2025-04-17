@@ -36,7 +36,7 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
           {sku.variants.map((variant) => (
             <div
               key={variant.id}
-              className="px-3 py-1 rounded-full text-sm text-white border border-zinc-700"
+              className="py-2 font-bold rounded-full text-sm text-white"
             >
               {variant.name}
             </div>
