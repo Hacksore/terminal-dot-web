@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "terminalcoffee-shop-root",
   "private": true,
   "scripts": {
     "build": "turbo run build",
