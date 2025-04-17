@@ -3,6 +3,7 @@ import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Footer } from "@/components/footer";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -16,12 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistMono.variable} antialiased flex flex-col min-h-screen`}>
+      <body
+        className={`${geistMono.variable} antialiased flex flex-col min-h-screen`}
+      >
         <Providers>
-          <div className="flex-1">
-            {children}
-          </div>
+          <div className="flex-1">{children}</div>
           <Footer />
+          <Toaster />
         </Providers>
       </body>
     </html>

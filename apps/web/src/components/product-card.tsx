@@ -6,6 +6,7 @@ import type {
   ProductVariant,
 } from "@terminaldotshop/sdk/resources/product";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ProductCardProps {
   sku: Product;
@@ -13,6 +14,7 @@ interface ProductCardProps {
 
 export const ProductCard = ({ sku }: ProductCardProps) => {
   const addItem = useCartStore((state) => state.addItem);
+  const { toast } = useToast();
   const [selectedVariant, setSelectedVariant] = useState<
     ProductVariant | undefined
   >(sku.variants[0]);
@@ -20,6 +22,10 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
   const handleAddToCart = () => {
     if (!selectedVariant) return;
     addItem({ ...sku, selectedVariant });
+    toast({
+      title: "Added to cart",
+      description: `${sku.name} has been added to your cart.`,
+    });
   };
 
   return (

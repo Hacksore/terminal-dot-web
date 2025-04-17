@@ -7,7 +7,7 @@ import { useEffect, useState, useRef } from "react";
 export const App = ({ data }: { data: Product[] }) => {
   const [activeWord, setActiveWord] = useState(0);
   const words = ["Drink.", "Code.", "Sleep.", "Repeat."];
-  const intervalRef = useRef<NodeJS.Timeout|null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Clear any existing interval
