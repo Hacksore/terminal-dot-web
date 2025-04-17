@@ -19,7 +19,7 @@ export const App = ({ data }: { data: Product[] }) => {
         const next = (prev + 1) % words.length;
         return next;
       });
-    }, 1000);
+    }, 2000);
 
     return () => {
       if (intervalRef.current) {
@@ -35,7 +35,7 @@ export const App = ({ data }: { data: Product[] }) => {
           {words.map((word, index) => (
             <span
               key={word}
-              className={`inline-block transition-all duration-1000 ease-in-out ${
+              className={`inline-block transition-all duration-3000 ease-in-out ${
                 activeWord === index
                   ? "bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent"
                   : "text-white"
