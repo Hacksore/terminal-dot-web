@@ -56,7 +56,9 @@ export const useCartStore = create<CartStore>()(
             const item = state.items.find((item) => item.id === productId);
             if (item) {
               if (quantity <= 0) {
-                const index = state.items.findIndex((item) => item.id === productId);
+                const index = state.items.findIndex(
+                  (item) => item.id === productId,
+                );
                 if (index !== -1) {
                   state.items.splice(index, 1);
                 }

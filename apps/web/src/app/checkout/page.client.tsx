@@ -104,7 +104,9 @@ export default function CheckoutPage() {
 
         {cartItems.length === 0 ? (
           <div className="bg-zinc-800 rounded-lg p-6 mb-8">
-            <p className="text-center text-muted-foreground">Your cart is empty</p>
+            <p className="text-center text-muted-foreground">
+              Your cart is empty
+            </p>
             <div className="mt-4 text-center">
               <Link href="/">
                 <Button variant="outline">Continue Shopping</Button>
@@ -278,7 +280,8 @@ export default function CheckoutPage() {
                             {card.brand} ending in {card.last4}
                           </p>
                           <p className="text-sm text-zinc-400">
-                            Expires {card.expiration.month}/{card.expiration.year}
+                            Expires {card.expiration.month}/
+                            {card.expiration.year}
                           </p>
                         </button>
                       ))}
