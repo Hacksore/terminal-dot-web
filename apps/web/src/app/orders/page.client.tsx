@@ -16,7 +16,10 @@ export default function OrdersPage() {
           <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
           <div className="animate-pulse space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-zinc-800 rounded-lg p-6 h-32" />
+              <div
+                key={i}
+                className="dark:bg-zinc-800 bg-white rounded-lg p-6 h-32"
+              />
             ))}
           </div>
         </div>
@@ -32,7 +35,10 @@ export default function OrdersPage() {
         {orders && orders.length > 0 ? (
           <div className="space-y-4">
             {orders.map((order) => (
-              <div key={order.id} className="bg-zinc-800 rounded-lg p-6">
+              <div
+                key={order.id}
+                className="dark:bg-zinc-800 bg-white border border-zinc-300 dark:border-white/20 rounded-lg p-6"
+              >
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-lg font-medium">
@@ -63,7 +69,7 @@ export default function OrdersPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-zinc-800 rounded-lg p-6 text-center">
+          <div className="dark:bg-zinc-800 bg-white rounded-lg p-6 text-center">
             <p className="text-zinc-400">You haven't placed any orders yet.</p>
           </div>
         )}

@@ -29,14 +29,14 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
           href="/"
           className="cursor-pointer no-underline flex items-center gap-2"
         >
-          <h2 className="text-2xl font-bold">terminal</h2>
+          <h2 className="text-2xl text-white font-bold">terminal</h2>
           <div className="w-5 h-10 bg-primary blink" />
         </Link>
         <div className="flex items-center gap-4">
           <button
             onClick={onCartClick}
             type="button"
-            className="cursor-pointer relative p-2 hover:bg-zinc-800 rounded-full transition-colors"
+            className="cursor-pointer relative p-2 text-white hover:bg-zinc-800 rounded-full transition-colors"
           >
             <ShoppingCart className="w-6 h-6" />
             {totalItems > 0 && (
@@ -65,10 +65,10 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
               <DropdownMenuContent align="end" className="bg-zinc-900 border-0">
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-base font-medium leading-none">
+                    <p className="text-white font-medium leading-none">
                       {session.user?.name}
                     </p>
-                    <p className="text-xs leading-none text-muted-foreground">
+                    <p className="text-xs leading-none text-white/90">
                       {session.user?.email}
                     </p>
                   </div>
@@ -79,7 +79,7 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
                   className="hover:bg-primary hover:text-black"
                 >
                   <Link href="/orders" className="cursor-pointer">
-                    <span>Orders</span>
+                    <span className="text-white">Orders</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -87,7 +87,7 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
                   className="hover:bg-primary hover:text-black"
                 >
                   <Link href="/checkout" className="cursor-pointer">
-                    <span>Checkout</span>
+                    <span className="text-white">Checkout</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

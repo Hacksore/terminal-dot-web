@@ -12,13 +12,13 @@ export default function ThankYouPage() {
       <div className="max-w-2xl w-full mt-20 mx-auto">
         <h1 className="text-3xl font-bold mb-8">Thank You for Your Order!</h1>
 
-        <div className="bg-zinc-800 rounded-lg p-8 mb-8">
+        <div className="dark:bg-zinc-800 bg-zinc-100 rounded-lg p-8 mb-8">
           <div className="space-y-6">
             <p className="text-lg">
               Your order has been received and is being processed. We've sent a
               confirmation email to your inbox with all the details.
             </p>
-            <p className="text-zinc-400">
+            <p>
               Please check your email for updates on your order status. If you
               have any questions, feel free to reach out to our support team.
             </p>

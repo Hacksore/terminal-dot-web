@@ -38,7 +38,7 @@ export const App = ({ data }: { data: Product[] }) => {
               className={`inline-block transition-all duration-3000 ease-in-out ${
                 activeWord === index
                   ? "bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent"
-                  : "text-white"
+                  : "text-black dark:text-white"
               }`}
             >
               {word}

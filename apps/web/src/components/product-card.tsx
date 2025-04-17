@@ -38,7 +38,7 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
     <div className="flex flex-col gap-4 max-w-2xl rounded-2xl p-4 border border-zinc-700">
       <div className="flex justify-between items-start">
         <h1 className="text-3xl font-bold">{sku.name}</h1>
-        <div className="px-3 py-1 rounded-full font-bold text-sm text-white border border-zinc-700">
+        <div className="px-3 py-1 rounded-full font-bold text-sm text-black dark:text-white border border-zinc-700">
           ${(sku.variants[0].price / 100).toFixed(2)}
         </div>
       </div>

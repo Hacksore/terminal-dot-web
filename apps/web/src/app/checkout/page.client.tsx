@@ -115,7 +115,7 @@ export default function CheckoutPage() {
           </div>
         ) : (
           <>
-            <div className="bg-zinc-800 rounded-lg p-6 mb-8">
+            <div className="dark:bg-zinc-800 bg-white rounded-lg p-6 mb-8">
               <h2 className="text-xl font-bold mb-4">Order Summary</h2>
               <div className="space-y-2">
                 {cartItems.map((item) => (
