@@ -31,8 +31,8 @@ export const checkout = async ({
     });
 
     // add the items from the cart
-    if (!Array.isArray(items) || items.length === 0) {
-      throw new Error("No items provided for checkout");
+    if (!Array.isArray(items)) {
+      throw new Error("Invalid items format");
     }
 
     for (const item of items) {

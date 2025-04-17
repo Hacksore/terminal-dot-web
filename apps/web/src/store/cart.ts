@@ -55,7 +55,14 @@ export const useCartStore = create<CartStore>()(
           produce((state: CartStore) => {
             const item = state.items.find((item) => item.id === productId);
             if (item) {
-              item.quantity = quantity;
+              if (quantity <= 0) {
+                const index = state.items.findIndex((item) => item.id === productId);
+                if (index !== -1) {
+                  state.items.splice(index, 1);
+                }
+              } else {
+                item.quantity = quantity;
+              }
             }
           }),
         ),
