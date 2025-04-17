@@ -3,6 +3,7 @@
 import { useCartStore } from "@/store/cart";
 import { LogOut, ShoppingCart, User } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,13 +25,13 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
   return (
     <div className="fixed top-0 left-0 right-0 bg-zinc-900 border-b border-zinc-700 p-4 z-50">
       <div className="max-w-4xl mx-auto flex justify-between items-center">
-        <a
+        <Link
           href="/"
           className="cursor-pointer no-underline flex items-center gap-2"
         >
           <h2 className="text-2xl font-bold">terminal</h2>
           <div className="w-5 h-10 bg-primary blink" />
-        </a>
+        </Link>
         <div className="flex items-center gap-4">
           <button
             onClick={onCartClick}
@@ -77,17 +78,17 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
                   asChild
                   className="hover:bg-primary hover:text-black"
                 >
-                  <a href="/orders" className="cursor-pointer">
+                  <Link href="/orders" className="cursor-pointer">
                     <span>Orders</span>
-                  </a>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   asChild
                   className="hover:bg-primary hover:text-black"
                 >
-                  <a href="/checkout" className="cursor-pointer">
+                  <Link href="/checkout" className="cursor-pointer">
                     <span>Checkout</span>
-                  </a>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
