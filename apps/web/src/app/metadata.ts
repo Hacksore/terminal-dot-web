@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
-const title = "terminal coffee";
-const description = "all the products from terminal coffee";
+const title = "terminalcoffee.shop";
+const description = "Order terminal coffee from your WEB BROWSER 🤯";
 const BASE_URL = process.env.VERCEL_ENV
-  ? "https://terminal-dot-web.vercel.app"
+  ? "https://terminalcoffee.shop"
   : "http://localhost:3000";
 
 export const metadata: Metadata = {
