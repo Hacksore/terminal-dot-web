@@ -24,19 +24,22 @@ export const ProductCard = ({ sku }: ProductCardProps) => {
 
   return (
     <div className="flex flex-col gap-2 max-w-2xl rounded-2xl px-4 py-2 border border-zinc-700">
-      <h1 className="text-3xl font-bold">{sku.name}</h1>
+      <div className="flex justify-between items-start">
+        <h1 className="text-3xl font-bold">{sku.name}</h1>
+        <div className="px-3 py-1 rounded-full font-bold text-sm text-white border border-zinc-700">
+          ${(sku.variants[0].price / 100).toFixed(2)}
+        </div>
+      </div>
       <p>{sku.description}</p>
       {sku.variants.length > 0 && (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {sku.variants.map((variant) => (
-            <button
-              type="button"
+            <div
               key={variant.id}
-              onClick={() => setSelectedVariant(variant)}
-              className="py-1 rounded-lg text-sm text-white"
+              className="px-3 py-1 rounded-full text-sm text-white border border-zinc-700"
             >
-              {variant.name} - ${(variant.price / 100).toFixed(2)}
-            </button>
+              {variant.name}
+            </div>
           ))}
         </div>
       )}
