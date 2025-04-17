@@ -185,7 +185,10 @@ export const authOptions = {
     async session({
       session,
       token,
-    }: { session: TerminalSession; token: TerminalToken }) {
+    }: {
+      session: TerminalSession;
+      token: TerminalToken;
+    }) {
       session.access_token = token.access_token;
       session.token_type = token.token_type;
       session.expires_at = token.expires_at;
