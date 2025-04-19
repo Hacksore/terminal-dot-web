@@ -1,6 +1,7 @@
 "use server";
 import { getAccessToken } from "@/lib/auth";
 import Terminal from "@terminaldotshop/sdk";
+import { track } from "@vercel/analytics";
 
 interface CheckoutParams {
   cardID: string;
@@ -48,12 +49,18 @@ export const checkout = async ({
 
     await client.cart.convert();
 
+    // track any orders that succeed
+    track("order-submitted", {});
+
     return {
       success: true,
       message: "Checkout initiated successfully",
     };
   } catch (error) {
     console.error("Checkout error:", error);
+    // track any orders that failed
+    track("order-failed", {});
+
     return {
       success: false,
       message:
