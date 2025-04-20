@@ -100,6 +100,22 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="max-w-2xl mx-auto">
+        <div className="bg-red-500 border border-red-600 rounded-lg p-4 mb-8 mt-12">
+          <p className="text-white font-bold text-lg">
+            THIS PAGE IS A REAL WAY TO ORDER FROM{" "}
+            <a
+              href="https://terminal.shop"
+              className="underline hover:text-red-200"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              terminal.shop
+            </a>
+          </p>
+          <p className="text-white font-bold text-lg">
+            IF YOU SUBMIT IT WILL CREATE AN ORDER, DONT TEST IN PROD
+          </p>
+        </div>
         <h1 className="text-3xl font-bold mb-8">Checkout</h1>
 
         {cartItems.length === 0 ? (
