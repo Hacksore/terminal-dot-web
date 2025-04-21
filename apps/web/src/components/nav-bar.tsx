@@ -104,8 +104,9 @@ export const Navbar = ({ onCartClick }: NavbarProps) => {
             <button
               onClick={() => signIn("terminalProvider")}
               type="button"
-              className="w-[120px] h-10 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center gap-2"
+              className="w-[120px] h-10 pr-1 cursor-pointer cut-corners-white bg-white text-black text-sm font-medium duration-300 flex items-center justify-center gap-2 relative group hover:text-white"
             >
+              <div className="absolute top-0 left-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 w-full h-full bg-primary -z-10" />
               <User className="w-4 h-4" />
               <span>Login</span>
             </button>

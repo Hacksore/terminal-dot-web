@@ -40,3 +40,61 @@ body {
 .blink {
   animation: blink 1.45s infinite step-start;
 }
+
+.bg-grid-dots {
+  background-image: radial-gradient(
+    circle at 0 0,
+    #777 1.5px,
+    transparent 0
+  ),
+  radial-gradient(
+    circle at 100% 100%,
+    #777 1.5px,
+    transparent 0
+  );
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+.bg-grid-lines {
+  background-size: 20px 20px;
+  background-image:
+    linear-gradient(to right, #8884 1px, transparent 1px),
+    linear-gradient(to bottom, #8884 1px, transparent 1px);
+}
+
+.cut-corners {
+  background:var(--color-primary, rgb(214, 233, 255));
+  mask:linear-gradient(
+                -45deg, 
+                transparent 10.313708498984761px, 
+                white 11.313708498984761px, 
+                white calc(100% - 10.313708498984761px), 
+                transparent calc(100% - 11.313708498984761px)
+            ),
+            linear-gradient(
+                45deg, 
+                transparent -1px, 
+                white 0px, 
+                white calc(100% - -1px),
+                transparent calc(100% - 0px)
+            );-webkit-mask-composite:destination-in;mask-composite:intersect
+}
+
+.cut-corners-white {
+  background:var(white, rgb(214, 233, 255));
+  mask:linear-gradient(
+                -45deg, 
+                transparent 10.313708498984761px, 
+                white 11.313708498984761px, 
+                white calc(100% - 10.313708498984761px), 
+                transparent calc(100% - 11.313708498984761px)
+            ),
+            linear-gradient(
+                45deg, 
+                transparent -1px, 
+                white 0px, 
+                white calc(100% - -1px),
+                transparent calc(100% - 0px)
+            );-webkit-mask-composite:destination-in;mask-composite:intersect
+}
