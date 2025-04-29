@@ -29,7 +29,7 @@ export const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            offical API
+            official API
           </a>
         </p>
       </div>
