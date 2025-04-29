@@ -22,7 +22,7 @@ export const Footer = () => {
           >
             terminal.shop
           </a>{" "}
-          and but it is using their{" "}
+          (Terminal Products Inc.) but it is using their{" "}
           <a
             href="https://www.terminal.shop/api"
             className="underline hover:text-blue-400"
